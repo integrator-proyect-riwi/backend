@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "[HERE_DESCRIPTION]",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/integrator-proyect-riwi/backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "module",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/integrator-proyect-riwi/backend/issues"
+  },
+  "homepage": "https://github.com/integrator-proyect-riwi/backend#readme"
+}
