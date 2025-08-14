@@ -4,6 +4,8 @@
   "description": "[HERE_DESCRIPTION]",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -11,11 +13,43 @@
     "url": "git+https://github.com/integrator-proyect-riwi/backend.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Backend Team RIWI",
+  "contributors": [
+    {
+      "name": "Integrante 1",
+      "email": "correo1@example.com"
+    },
+    {
+      "name": "Integrante 2",
+      "email": "correo2@example.com"
+    },
+    {
+      "name": "Integrante 3",
+      "email": "correo3@example.com"
+    },
+    {
+      "name": "Integrante 4",
+      "email": "correo4@example.com"
+    }
+  ],
   "type": "module",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/integrator-proyect-riwi/backend/issues"
   },
-  "homepage": "https://github.com/integrator-proyect-riwi/backend#readme"
+  "homepage": "https://github.com/integrator-proyect-riwi/backend#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "morgan": "^1.10.1",
+    "pg": "^8.16.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
 }
