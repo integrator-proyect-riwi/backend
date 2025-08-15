@@ -35,7 +35,7 @@
 
 ## 🤝 Collaborators
 
-- **Abraham Villa** – Fullstack Developer – [GitHub](https://github.com/abrahamvilla) | [Linkedin](https://linkedin.com)
-- **Carlos Gutierrez** – Fullstack Developer – [GitHub](https://github.com/cguty)
-- **Yoelmis Not lastname** – Fullstack Developer – [GitHub](https://github.com/cguty)
-- **Cesar Hernandez** – Fullstack Developer – [GitHub](https://github.com/cahg)
+- **Abraham Villa** – Fullstack Developer – [GitHub](https://github.com/ajvilla99) | [Linkedin](https://linkedin.com)
+- **Carlos Gutierrez** – Fullstack Developer – [GitHub](https://github.com/carlosGG9)
+- **Yoelmis Perdomo** – Fullstack Developer – [GitHub](https://github.com/YePerdom)
+- **Cesar Hernandez** – Fullstack Developer – [GitHub](https://github.com/cahg99)
