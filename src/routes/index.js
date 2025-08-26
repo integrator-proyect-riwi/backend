@@ -1,1 +1,1 @@
-// export { default as Index } from './Index.svelte';
+export { default as employees } from './emplyees.route.js';
