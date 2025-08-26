@@ -1,28 +1,29 @@
-import { Pool } from "pg";
+import { Sequelize } from "sequelize";
 import 'dotenv/config';
 
-const pool = new Pool({
-    user: process.env.DB_USER,
+
+const sequelize = new Sequelize(
+  process.env.DB_NAME,     
+  process.env.DB_USER,     
+  process.env.DB_PASSWORD, 
+  {
     host: process.env.DB_HOST,
-    password: process.env.DB_PASSWORD,
+    dialect: "postgres",
     port: process.env.DB_PORT,
-    database: process.env.DB_NAME
-});
+    logging: false, // desactiva logs de SQL en consola
+  }
+);
+
 
 async function testConnection() {
-    let conexion = null
-    try {
-        conexion = await pool.connect();
-        console.log("✅ conexion exitosa a la base de datos");
-    } catch (error) {
-        if (error) {
-            console.error("❌ Error al conectar con la base de datos:", error.message);
-        } else {
-            console.error("❌ Error desconocido:", error);
-        };
-    } finally {
-        if (conexion) conexion.release();
-    };
-};
+  try {
+    await sequelize.authenticate();
+    console.log("✅ Conexión exitosa a la base de datos con Sequelize");
+  } catch (error) {
+    console.error("❌ Error al conectar con la base de datos:", error.message);
+  }
+}
 
 testConnection();
+
+export default sequelize;
