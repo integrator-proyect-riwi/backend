@@ -2,10 +2,13 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 
+// Import Documentation
+import { swaggerUi, swaggerDocument } from './config/swagger.js';
 
 // import routes from './routes/index.js';
-import { swaggerUi, swaggerDocument } from './config/swagger.js';
-import { employees } from './routes/index.js';
+import { employees, usersRoutes } from './routes/index.js';
+
+// 
 const app = express();
 
 // Middlewares
@@ -20,6 +23,9 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get('/api/v1/', async(req,res) => {
     res.send('Conectada')
 });
+
+// users
+app.use('/api/v1/users', usersRoutes)
 
 // employees
 app.use('/api/v1/employees', employees);
