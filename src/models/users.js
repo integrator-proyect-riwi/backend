@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../db.js";
+import sequelize from "../config/db.js";
 
 const User = sequelize.define("User", {
   id: {
@@ -7,7 +7,7 @@ const User = sequelize.define("User", {
     primaryKey: true,
     autoIncrement: true,
   },
-  name: {
+  username: {
     type: DataTypes.STRING(100),
     allowNull: false,
   },
@@ -19,13 +19,15 @@ const User = sequelize.define("User", {
       isEmail: true,
     },
   },
-  password: {
+  passwd: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-}, {
-  tableName: "users",   // nombre de la tabla en la BD
-  timestamps: true,     // agrega createdAt y updatedAt
+},  {
+  tableName: "users",
+  timestamps: true,
+  createdAt: "created_at",   // mapea createdAt → created_at
+  updatedAt: "updated_at",   // mapea updatedAt → updated_at
 });
 
 export default User;
