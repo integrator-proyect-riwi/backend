@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import Role from "./role.js";
 
 const User = sequelize.define("User", {
   id: {
@@ -23,11 +24,25 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  id_user_role: {
+    type: DataTypes.INTEGER,
+  },
 },  {
   tableName: "users",
   timestamps: true,
   createdAt: "created_at",   // mapea createdAt → created_at
   updatedAt: "updated_at",   // mapea updatedAt → updated_at
 });
+
+// Un usuario pertenece a un rol, usando la llave foránea `id_user_role`
+User.belongsTo(Role, {
+  foreignKey: "id_user_role",
+});
+
+// Un rol puede tener muchos usuarios, usando la llave foránea `id_user_role`
+// (Esta relación es mejor definirla en el archivo del modelo Role para evitar dependencias circulares)
+// Role.hasMany(User, {
+//  foreignKey: "id_user_role",
+// });
 
 export default User;
