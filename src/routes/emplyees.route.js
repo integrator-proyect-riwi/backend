@@ -17,8 +17,4 @@ router.get('/employees/:id/history/vacations' , () => {})
 router.get('/employees/:id/history/permissions' , () => {})
 router.get('/employees/:id/history/certificates' , () => {})
 
-// router.post('/', createBilling);
-// router.patch('/:id', editBilling);
-// router.delete('/:id', deleteBilling);
-
 export default router;
