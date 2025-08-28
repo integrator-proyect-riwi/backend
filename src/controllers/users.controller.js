@@ -1,5 +1,5 @@
-import Role from "../models/role.js";
-import User from "../models/users.js";
+import Role from '../models/role.js';
+import User from '../models/users.js';
 
 // Crear usuario
 export async function createUser(req, res) {
@@ -15,12 +15,10 @@ export async function createUser(req, res) {
 export async function getUsers(req, res) {
   try {
     const users = await User.findAll({
-      // Usar `include` en singular
       include: [{
         model: Role,
-        // Usar `required` para hacer un INNER JOIN
-        required: true,
-        attributes: [['name', 'role']] 
+        as: 'role',
+        attributes: ['name']
       }]
     });
     res.json(users);
@@ -33,9 +31,18 @@ export async function getUsers(req, res) {
 export async function getUserById(req, res) {
   try {
     const id = req.params.id
-    const user = await User.findByPk(id);
-    if (!user){
-      res.status(404).json({message: "User not found"});
+    const user = await User.findOne({
+      include: [{
+      model: Role,
+      as: 'role',
+      attributes: ['name']
+    }],
+    where:{
+      id: id
+    }
+  });
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
     };
     res.status(201).json(user);
   } catch (error) {

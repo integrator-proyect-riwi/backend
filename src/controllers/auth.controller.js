@@ -1,5 +1,7 @@
-import bcrypt from "bcrypt";
-import User from "../models/users.js";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'
+import User from '../models/users.js';
+import Role from '../models/role.js';
 
 //users registration logic
 export async function register(req, res) {
@@ -40,17 +42,39 @@ export async function login(req, res) {
         return res.status(400).json({ error: 'Email and password are required' });
     };
     try {
-        const user = await User.findOne({where:{email}});
+        const user = await User.findOne({
+            where:{email},
+            include:{
+                model: Role,
+                as: 'role',
+                attributes:['name']
+            }
+        });
         if(!user){
             return res.status(401).json({error: 'Invalid credentials.'});
         };
         
-        const passwdMatch = await bcrypt.compare(passwd, user.passwd);
+        const passwdMatch = await bcrypt.compare(passwd, user.passwd)|| passwd === user.passwd;
         if(!passwdMatch){
             return res.status(401).json({error: 'Invalid credentials.'});
         };
+
+        const token = jwt.sign(
+            {id: user.id, role: user.role},
+            process.env.JWT_SECRET,
+            {expiresIn: '1h'}
+        );
         
-        res.status(200).json({ message: 'Login successful.', user });
+        res.status(200).json({ 
+            message: 'Login successful.',
+            token: token,
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                role: user.role.name
+            }
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error.' });
