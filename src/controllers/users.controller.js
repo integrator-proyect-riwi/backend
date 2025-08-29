@@ -1,5 +1,5 @@
 import Role from '../models/role.js';
-import User from '../models/users.js';
+import User from '../models/user.js';
 
 // Crear usuario
 export async function createUser(req, res) {
@@ -15,10 +15,11 @@ export async function createUser(req, res) {
 export async function getUsers(req, res) {
   try {
     const users = await User.findAll({
+      attributes: ['username', 'passwd', 'email'],
       include: [{
         model: Role,
-        as: 'role',
-        attributes: ['name']
+        attributes: ['name'],
+        through: { attributes: [] }
       }]
     });
     res.json(users);
