@@ -118,6 +118,7 @@ UPDATE departments SET leader_id = 3 WHERE id = 3;
 -- TABLE: user_role
 INSERT INTO user_role (user_id, role_id) VALUES
 (1, 1), -- jdoe es Administrador
+(1, 2), -- jdoe es Empleado
 (2, 2), -- asmith es Empleado
 (3, 2), -- mmartinez es Empleado
 (4, 2), -- lgarcia es Empleado
