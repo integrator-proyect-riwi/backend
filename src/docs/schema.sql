@@ -116,7 +116,7 @@ FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
 FOREIGN KEY (role_id) REFERENCES role(id) ON UPDATE CASCADE ON DELETE RESTRICT
 ) INHERITS (base_table);
 
--------- TABLE: departments --------
+------ TABLE: departments --------
 CREATE TABLE departments (
   id SERIAL PRIMARY KEY,
   name VARCHAR (100) NOT NULL UNIQUE,
@@ -152,8 +152,8 @@ CREATE TABLE employees (
   identification VARCHAR (50) NOT NULL UNIQUE,
   gender_id INT NOT NULL,
   user_id INT NOT NULL,
-  contract_id INT,
-  status_id INT,
+  contract_id INT NOT NULL,
+  status_id INT NOT NULL,
   
   FOREIGN KEY (gender_id) REFERENCES genders (id) ON DELETE RESTRICT ON UPDATE CASCADE,
   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
