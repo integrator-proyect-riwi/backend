@@ -1,22 +1,22 @@
 -- Delete tables in safe order---
-DROP TABLE IF EXISTS base_table CASCADE;
 DROP TABLE IF EXISTS certificate_requests CASCADE;
-DROP TABLE IF EXISTS priorities CASCADE;
-DROP TABLE IF EXISTS supports CASCADE;
+DROP TABLE IF EXISTS requests CASCADE;
 DROP TABLE IF EXISTS employees CASCADE;
 DROP TABLE IF EXISTS contracts CASCADE;
-DROP TABLE IF EXISTS requests CASCADE;
 DROP TABLE IF EXISTS departments CASCADE;
-DROP TABLE IF EXISTS contract_types CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS user_role CASCADE;
-DROP TABLE IF EXISTS role CASCADE;
-DROP TABLE IF EXISTS certificate_types CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS supports CASCADE;
+DROP TABLE IF EXISTS priorities CASCADE;
 DROP TABLE IF EXISTS request_types CASCADE;
+DROP TABLE IF EXISTS certificate_types CASCADE;
 DROP TABLE IF EXISTS occupations CASCADE;
+DROP TABLE IF EXISTS contract_types CASCADE;
 DROP TABLE IF EXISTS status CASCADE;
-DROP TABLE IF EXISTS types_status CASCADE;
+DROP TABLE IF EXISTS status_types CASCADE;
 DROP TABLE IF EXISTS genders CASCADE;
+DROP TABLE IF EXISTS role CASCADE;
+DROP TABLE IF EXISTS base_table CASCADE;
 
 -------- Fields that all tables will inherit --------
 CREATE TABLE base_table(
@@ -121,7 +121,7 @@ CREATE TABLE departments (
   id SERIAL PRIMARY KEY,
   name VARCHAR (100) NOT NULL UNIQUE,
   codename VARCHAR (100) NOT NULL UNIQUE,
-  leader_id INT 
+  leader_id INT UNIQUE
 ) INHERITS (base_table);
 
 -------- TABLE: contracts --------
@@ -168,11 +168,13 @@ ALTER TABLE departments
 -------- TABLE: requests --------
 CREATE TABLE requests (
   id SERIAL PRIMARY KEY,
+  code CHAR(7) NOT NULL UNIQUE,
   employee_id INT NOT NULL,
   request_type_id INT NOT NULL,
   support_id INT NOT NULL,
   status_id INT NOT NULL,
-  priority_id INT NOT NULL,
+  priority_id INT NOT NULL DEFAULT 2,
+  leader_id INT NOT NULL,
   start_date DATE NOT NULL,
   end_date DATE,
   
@@ -180,7 +182,8 @@ CREATE TABLE requests (
   FOREIGN KEY (request_type_id) REFERENCES request_types (id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (status_id) REFERENCES status (id) ON DELETE SET NULL ON UPDATE CASCADE,
   FOREIGN KEY (support_id) REFERENCES supports (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  FOREIGN KEY (priority_id) REFERENCES priorities (id) ON DELETE SET NULL ON UPDATE CASCADE
+  FOREIGN KEY (priority_id) REFERENCES priorities (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (leader_id) REFERENCES employees (id) ON DELETE SET NULL ON UPDATE CASCADE
 ) INHERITS(base_table);
 
 -------- TABLA: certificate_requests --------
