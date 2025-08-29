@@ -18,6 +18,7 @@ export async function getUsers(req, res) {
       attributes: ['username', 'passwd', 'email'],
       include: [{
         model: Role,
+        as: 'role',
         attributes: ['name'],
         through: { attributes: [] }
       }]
