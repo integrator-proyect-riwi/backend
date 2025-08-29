@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import { baseFields } from "./baseModel.js";
 
 const Role = sequelize.define("role", {
   id: {
@@ -9,21 +10,18 @@ const Role = sequelize.define("role", {
   },
   name: {
     type: DataTypes.STRING(100),
+    unique: true,
     allowNull: false,
   },
   codename: {
     type: DataTypes.STRING(100),
+    unique: true,
     allowNull: false,
   },
-    is_active: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  }
+  ...baseFields,
 },  {
   tableName: "role",
-  timestamps: true,
-  createdAt: "created_at",
-  updatedAt: "updated_at",
+  timestamps: false,
 });
 
 export default Role;

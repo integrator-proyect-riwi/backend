@@ -1,8 +1,9 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import { baseFields } from "./baseModel.js";
 
 
-const Employees = sequelize.define("employee", {
+const Employee = sequelize.define("employee", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -17,13 +18,13 @@ const Employees = sequelize.define("employee", {
     allowNull: false,
   },
   birthday: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: false,
   },
   identification: {
     type: DataTypes.STRING(50),
     allowNull: false,
-    unique: "employees_identification_key"
+    unique: true,
   },
   gender_id: {
     type: DataTypes.INTEGER,
@@ -41,15 +42,10 @@ const Employees = sequelize.define("employee", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  is_active: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  }
+  ...baseFields,
 }, {
   tableName: "employees",
-  timestamps: true,
-  createdAt: "created_at",   // mapea createdAt → created_at
-  updatedAt: "updated_at",   // mapea updatedAt → updated_at
+  timestamps: false,
 });
 
-export default Employees;
+export default Employee;

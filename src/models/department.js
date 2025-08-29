@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import { baseFields } from "./baseModel.js";
 
 const Department = sequelize.define('department', {
   id: {
@@ -21,22 +22,11 @@ const Department = sequelize.define('department', {
     type: DataTypes.INTEGER,
     unique: true,
     allowNull: true,
-    references: {
-      model: 'employees',
-      key: 'id',
-    },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
   },
-  is_active: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true,
-  },
+  ...baseFields,
 }, {
   tableName: 'departments',
-  timestamps: true,
-  createdAt: 'created_at',
-  updatedAt: 'updated_at',
+  timestamps: false,
 });
 
 export default Department;

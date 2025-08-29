@@ -1,7 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import { baseFields } from "./baseModel.js";
 
-const Genders = sequelize.define("gender", {
+const ContractType = sequelize.define("contract_type", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -9,21 +10,18 @@ const Genders = sequelize.define("gender", {
   },
   name: {
     type: DataTypes.STRING(100),
+    unique: true,
     allowNull: false,
   },
   codename: {
     type: DataTypes.STRING(100),
+    unique: true,
     allowNull: false,
   },
-    is_active: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  }
+  ...baseFields
 },  {
-  tableName: "genders",
-  timestamps: true,
-  createdAt: "created_at",
-  updatedAt: "updated_at",
+  tableName: "contract_types",
+  timestamps: false,
 });
 
-export default Genders;
+export default ContractType;

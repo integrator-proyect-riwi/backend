@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
-import Role from "./role.js";
+import { baseFields } from "./baseModel.js";
 
 const User = sequelize.define("user", {
   id: {
@@ -9,6 +9,11 @@ const User = sequelize.define("user", {
     autoIncrement: true,
   },
   username: {
+    type: DataTypes.STRING(100),
+    unique: true,
+    allowNull: false,
+  },
+  passwd: {
     type: DataTypes.STRING(100),
     allowNull: false,
   },
@@ -20,24 +25,10 @@ const User = sequelize.define("user", {
       isEmail: true,
     },
   },
-  passwd: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  id_user_role: {
-    type: DataTypes.INTEGER,
-    defaultValue: 2,
-    allowNull: false
-  },
-},  {
+  ...baseFields,
+}, {
   tableName: "users",
-  timestamps: true,
-  createdAt: "created_at",
-  updatedAt: "updated_at",
-});
-
-User.belongsTo(Role, {
-  foreignKey: "id_user_role",
+  timestamps: false,
 });
 
 export default User;

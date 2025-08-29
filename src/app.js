@@ -6,7 +6,7 @@ import cors from 'cors';
 import { swaggerUi, swaggerDocument } from './config/swagger.js';
 
 // import routes from './routes/index.js';
-import { auth, employees, users, certificates } from './routes/index.js';
+import { auth, employees, users } from './routes/index.js';
 import { verifyToken } from './middlewares/auth.middleware.js';
 
 // 
@@ -32,9 +32,6 @@ app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', users);
 
 // employees
-app.use('/api/v1/employees', employees);
-
-// certificates
-app.use('/api/v1/certificates', certificates);
+app.use('/api/v1/employee', employees);
 
 export default app;

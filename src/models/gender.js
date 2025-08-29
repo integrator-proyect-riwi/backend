@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 import { baseFields } from "./baseModel.js";
 
-const Status = sequelize.define("status", {
+const Gender = sequelize.define("gender", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -18,14 +18,10 @@ const Status = sequelize.define("status", {
     unique: true,
     allowNull: false,
   },
-  status_type_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  ...baseFields
-}, {
-  tableName: "status",
+  ...baseFields,
+},  {
+  tableName: "genders",
   timestamps: false,
 });
 
-export default Status;
+export default Gender;

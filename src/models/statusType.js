@@ -1,7 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import { baseFields } from "./baseModel.js";
 
-const Status_types = sequelize.define("status_type", {
+const StatusType = sequelize.define("status_type", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -9,21 +10,18 @@ const Status_types = sequelize.define("status_type", {
   },
   name: {
     type: DataTypes.STRING(100),
+    unique: true,
     allowNull: false,
   },
   codename: {
     type: DataTypes.STRING(100),
+    unique: true,
     allowNull: false,
   },
-    is_active: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  }
+  ...baseFields,
 },  {
   tableName: "status_types",
-  timestamps: true,
-  createdAt: "created_at",
-  updatedAt: "updated_at",
+  timestamps: false,
 });
 
-export default Status_types;
+export default StatusType;

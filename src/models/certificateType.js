@@ -1,7 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import { baseFields } from "./baseModel.js";
 
-const Request_types = sequelize.define("request_type", {
+const CertificateType = sequelize.define("certificate_type", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -9,21 +10,18 @@ const Request_types = sequelize.define("request_type", {
   },
   name: {
     type: DataTypes.STRING(100),
+    unique:true,
     allowNull: false,
   },
   codename: {
     type: DataTypes.STRING(100),
+    unique:true,
     allowNull: false,
   },
-    is_active: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  }
-},  {
-  tableName: "request_types",
-  timestamps: true,
-  createdAt: "created_at",
-  updatedAt: "updated_at",
+  ...baseFields,
+}, {
+  tableName: "certificate_types",
+  timestamps: false,
 });
 
-export default Request_types;
+export default CertificateType;

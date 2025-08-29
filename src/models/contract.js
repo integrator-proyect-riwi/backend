@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import { baseFields } from "./baseModel.js";
 
 const Contract = sequelize.define("contract", {
   id: {
@@ -19,6 +20,22 @@ const Contract = sequelize.define("contract", {
     type: DataTypes.DATEONLY,
     allowNull: true,
   },
+  status_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  contract_type_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  department_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  occupation_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
   responsibilities: {
     type: DataTypes.TEXT,
     allowNull: false,
@@ -27,15 +44,10 @@ const Contract = sequelize.define("contract", {
     type: DataTypes.DECIMAL(12, 2),
     allowNull: false,
   },
-  is_active: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true,
-  },
+  ...baseFields,
 }, {
   tableName: "contracts",
-  timestamps: true,
-  createdAt: "created_at",
-  updatedAt: "updated_at",
+  timestamps: false,
 });
 
 export default Contract;

@@ -1,7 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import { baseFields } from "./baseModel.js";
 
-const Occupations = sequelize.define("occupation", {
+const Occupation = sequelize.define("occupation", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -9,21 +10,18 @@ const Occupations = sequelize.define("occupation", {
   },
   name: {
     type: DataTypes.STRING(100),
+    unique: true,
     allowNull: false,
   },
   codename: {
     type: DataTypes.STRING(100),
+    unique: true,
     allowNull: false,
   },
-    is_active: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  }
+  ...baseFields,
 },  {
   tableName: "occupations",
-  timestamps: true,
-  createdAt: "created_at",
-  updatedAt: "updated_at",
+  timestamps: false,
 });
 
-export default Occupations;
+export default Occupation;

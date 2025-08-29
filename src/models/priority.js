@@ -1,8 +1,9 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import { baseFields } from "./baseModel.js";
 
 
-const Priorities = sequelize.define("priority", {
+const Priority = sequelize.define("priority", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -10,21 +11,18 @@ const Priorities = sequelize.define("priority", {
   },
   name: {
     type: DataTypes.STRING(100),
+    unique: true,
     allowNull: false,
   },
   codename: {
     type: DataTypes.STRING(100),
+    unique: true,
     allowNull: false,
   },
-  is_active: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  }
+  ...baseFields,
 }, {
   tableName: "priorities",
-  timestamps: true,
-  createdAt: "created_at",   // mapea createdAt → created_at
-  updatedAt: "updated_at",   // mapea updatedAt → updated_at
+  timestamps: false,
 });
 
-export default Priorities;
+export default Priority;

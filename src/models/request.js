@@ -1,14 +1,17 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import { baseFields } from "./baseModel.js";
 
-const Requests = sequelize.define("request", {
+const Request = sequelize.define("request", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
   code: {
-    type: DataTypes.STRING(7)
+    type: DataTypes.CHAR(7),
+    unique: true,
+    allowNull: false,
   },
   employee_id: {
     type: DataTypes.INTEGER,
@@ -35,21 +38,18 @@ const Requests = sequelize.define("request", {
     allowNull: false,
   },
   start_date: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: false
   },
   end_date: {
-    type: DataTypes.DATE
+    type: DataTypes.DATEONLY,
+    allowNull: true,
   },
-  is_active: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  }
+  ...baseFields
 }, {
   tableName: "requests",
-  timestamps: true,
-  createdAt: "created_at",   // mapea createdAt → created_at
-  updatedAt: "updated_at",   // mapea updatedAt → updated_at
+  timestamps: false, 
 });
 
-export default Requests;
+export default Request;
+

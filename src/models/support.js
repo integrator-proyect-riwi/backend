@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import { baseFields } from "./baseModel.js";
 
 const Support = sequelize.define('support', {
     id: {
@@ -9,6 +10,7 @@ const Support = sequelize.define('support', {
     },
     documents: {
         type: DataTypes.BLOB,
+        allowNull: true,
     },
     reason: {
         type: DataTypes.TEXT,
@@ -16,16 +18,12 @@ const Support = sequelize.define('support', {
     },
     observation: {
         type: DataTypes.TEXT,
+        allowNull: true,
     },
-    is_active: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-    }
+    ...baseFields,
 }, {
     tableName: "supports",
-    timestamps: true,
-    createdAt: "created_at",
-    updatedAt: "updated_at",
+    timestamps: false,
 });
 
 export default Support;
