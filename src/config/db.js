@@ -23,6 +23,6 @@ async function testConnection() {
   }
 }
 
-testConnection();
+// testConnection();
 
 export default sequelize;
