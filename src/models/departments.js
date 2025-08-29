@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
-const Status = sequelize.define("status", {
+const Department = sequelize.define('department', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -10,24 +10,33 @@ const Status = sequelize.define("status", {
   name: {
     type: DataTypes.STRING(100),
     allowNull: false,
+    unique: true,
   },
   codename: {
     type: DataTypes.STRING(100),
     allowNull: false,
+    unique: true,
   },
-  status_type_id: {
+  leader_id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    unique: true,
+    allowNull: true,
+    references: {
+      model: 'employees',
+      key: 'id',
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
   },
   is_active: {
     type: DataTypes.BOOLEAN,
-    allowNull: false,
-  }
+    defaultValue: true,
+  },
 }, {
-  tableName: "status",
+  tableName: 'departments',
   timestamps: true,
-  createdAt: "created_at",   // mapea createdAt → created_at
-  updatedAt: "updated_at",   // mapea updatedAt → updated_at
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
 });
 
-export default Status;
+export default Department;

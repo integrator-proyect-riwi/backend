@@ -14,9 +14,13 @@ const Role = sequelize.define("role", {
   codename: {
     type: DataTypes.STRING(100),
     allowNull: false,
+  },
+    is_active: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
   }
 },  {
-  tableName: "users_role",
+  tableName: "role",
   timestamps: true,
   createdAt: "created_at",
   updatedAt: "updated_at",

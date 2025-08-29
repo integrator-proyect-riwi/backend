@@ -1,37 +1,55 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
-const Certificates = sequelize.define("Certificates", {
+const Requests = sequelize.define("request", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  id_employee: {
+  code: {
+    type: DataTypes.STRING(7)
+  },
+  employee_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  id_type_certificate: {
+  request_type_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  id_status: {
+  support_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  id_priority: {
+  status_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
+  },
+  priority_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  leader_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  start_date: {
+    type: DataTypes.DATE,
+    allowNull: false
+  },
+  end_date: {
+    type: DataTypes.DATE
   },
   is_active: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
   }
 }, {
-  tableName: "certificates_requests",
+  tableName: "requests",
   timestamps: true,
   createdAt: "created_at",   // mapea createdAt → created_at
   updatedAt: "updated_at",   // mapea updatedAt → updated_at
 });
 
-export default Certificates;
+export default Requests;

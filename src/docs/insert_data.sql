@@ -1,22 +1,22 @@
 -- Clean all tables and reset IDs
 TRUNCATE TABLE 
     certificate_requests,
-    priorities,
-    supports,
+    requests,
+    user_role,
     employees,
     contracts,
-    requests,
     departments,
     contract_types,
-    users,
-    user_role,
-    role,
+    supports,
     certificate_types,
     request_types,
+    priorities,
+    users,
     occupations,
     status,
     status_types,
-    genders
+    genders,
+    role
 RESTART IDENTITY CASCADE;
 
 -- execute INSERTs normally
@@ -122,3 +122,16 @@ INSERT INTO user_role (user_id, role_id) VALUES
 (3, 2), -- mmartinez es Empleado
 (4, 2), -- lgarcia es Empleado
 (5, 1); -- admin es Administrado
+
+-- TABLE: reuqests
+INSERT INTO requests (code, employee_id, request_type_id, support_id, status_id, priority_id, leader_id, start_date, end_date) VALUES
+('SOL-001', 2, 3, 2, 3, 2, 2, '2025-10-15', '2025-10-26'),
+('SOL-002', 3, 3, 1, 3, 1, 1, '2025-09-15', '2025-09-25'),
+('SOL-003', 1, 1, 1, 4, 2, 2, '2025-08-01', '2025-08-01'),
+('SOL-004', 4, 2, 2, 3, 4, 3, '2025-09-10', '2025-09-15'),
+('SOL-005', 2, 3, 2, 5, 3, 1, '2025-10-01', '2025-10-10'),
+('SOL-006', 1, 1, 1, 4, 1, 2, '2025-07-15', '2025-07-15');
+
+INSERT INTO certificate_requests (request_id, certificate_type_id) VALUES
+(3, 1),
+(6, 2);

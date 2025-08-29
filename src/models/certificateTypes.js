@@ -1,8 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
-
-const Priorities = sequelize.define("priority", {
+const Certificate_types = sequelize.define("certificate_type", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -21,10 +20,10 @@ const Priorities = sequelize.define("priority", {
     allowNull: false,
   }
 }, {
-  tableName: "priorities",
+  tableName: "certificate_types",
   timestamps: true,
   createdAt: "created_at",   // mapea createdAt → created_at
   updatedAt: "updated_at",   // mapea updatedAt → updated_at
 });
 
-export default Priorities;
+export default Certificate_types;
