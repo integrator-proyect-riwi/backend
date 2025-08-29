@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
 
-const Employees = sequelize.define("Employees", {
+const Employees = sequelize.define("employee", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -25,19 +25,19 @@ const Employees = sequelize.define("Employees", {
     allowNull: false,
     unique: "employees_identification_key"
   },
-  id_gender: {
+  gender_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  id_user: {
+  user_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  id_contract: {
+  contract_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  id_status: {
+  status_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },

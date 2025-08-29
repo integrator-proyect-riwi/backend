@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
 
-const TypesCertificates = sequelize.define("Status", {
+const Genders = sequelize.define("gender", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -15,15 +15,15 @@ const TypesCertificates = sequelize.define("Status", {
     type: DataTypes.STRING(100),
     allowNull: false,
   },
-  is_active: {
+    is_active: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
   }
-}, {
-  tableName: "types_certificates",
+},  {
+  tableName: "genders",
   timestamps: true,
-  createdAt: "created_at",   // mapea createdAt → created_at
-  updatedAt: "updated_at",   // mapea updatedAt → updated_at
+  createdAt: "created_at",
+  updatedAt: "updated_at",
 });
 
-export default TypesCertificates;
+export default Genders;
