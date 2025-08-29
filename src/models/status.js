@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
+import { baseFields } from "./baseModel.js";
 
 const Status = sequelize.define("status", {
   id: {
@@ -9,25 +10,22 @@ const Status = sequelize.define("status", {
   },
   name: {
     type: DataTypes.STRING(100),
+    unique: true,
     allowNull: false,
   },
   codename: {
     type: DataTypes.STRING(100),
+    unique: true,
     allowNull: false,
   },
   status_type_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  is_active: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  }
+  ...baseFields
 }, {
   tableName: "status",
-  timestamps: true,
-  createdAt: "created_at",   // mapea createdAt → created_at
-  updatedAt: "updated_at",   // mapea updatedAt → updated_at
+  timestamps: false,
 });
 
 export default Status;
