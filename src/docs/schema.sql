@@ -1,141 +1,128 @@
--- 🔹 Borrar tablas en orden seguro
-DROP TABLE IF EXISTS vacations CASCADE;
-DROP TABLE IF EXISTS certificates_requests CASCADE;
-DROP TABLE IF EXISTS custom_requests CASCADE;
+-- Delete tables in safe order---
+DROP TABLE IF EXISTS base_table CASCADE;
+DROP TABLE IF EXISTS certificate_requests CASCADE;
 DROP TABLE IF EXISTS priorities CASCADE;
 DROP TABLE IF EXISTS supports CASCADE;
 DROP TABLE IF EXISTS employees CASCADE;
 DROP TABLE IF EXISTS contracts CASCADE;
+DROP TABLE IF EXISTS requests CASCADE;
 DROP TABLE IF EXISTS departments CASCADE;
-DROP TABLE IF EXISTS types_contracts CASCADE;
-DROP TABLE IF EXISTS admins CASCADE;
+DROP TABLE IF EXISTS contract_types CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS users_role CASCADE;
-DROP TABLE IF EXISTS types_certificates CASCADE;
-DROP TABLE IF EXISTS types_requests CASCADE;
+DROP TABLE IF EXISTS user_role CASCADE;
+DROP TABLE IF EXISTS role CASCADE;
+DROP TABLE IF EXISTS certificate_types CASCADE;
+DROP TABLE IF EXISTS request_types CASCADE;
 DROP TABLE IF EXISTS occupations CASCADE;
 DROP TABLE IF EXISTS status CASCADE;
 DROP TABLE IF EXISTS types_status CASCADE;
 DROP TABLE IF EXISTS genders CASCADE;
 
-
--------- TABLE: users_role --------
-CREATE TABLE users_role (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR (100) NOT NULL UNIQUE,
-  codename VARCHAR (100) NOT NULL UNIQUE,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-------- Fields that all tables will inherit --------
+CREATE TABLE base_table(
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-------- TABLE: role --------
+CREATE TABLE role (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR (100) NOT NULL UNIQUE,
+    codename VARCHAR (100) NOT NULL UNIQUE
+) INHERITS (base_table);
 
 -------- TABLE: genders --------
 CREATE TABLE genders (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR (100) NOT NULL UNIQUE,
-  codename VARCHAR (100) NOT NULL UNIQUE,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+    id SERIAL PRIMARY KEY,
+    name VARCHAR (100) NOT NULL UNIQUE,
+    codename VARCHAR (100) NOT NULL UNIQUE
+) INHERITS (base_table);
 
--------- TABLE: types_status --------
-CREATE TABLE types_status (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR (100) NOT NULL UNIQUE,
-  codename VARCHAR (100) NOT NULL UNIQUE,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-------- TABLE: contract_types --------
+CREATE TABLE contract_types (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR (100) NOT NULL UNIQUE,
+    codename VARCHAR (100) NOT NULL UNIQUE
+) INHERITS (base_table);
+
+-------- TABLE: occupations --------
+CREATE TABLE occupations (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR (100) NOT NULL UNIQUE,
+    codename VARCHAR (100) NOT NULL UNIQUE
+) INHERITS (base_table);
+
+-------- TABLE: certificate_types --------
+CREATE TABLE certificate_types (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR (100) NOT NULL UNIQUE,
+    codename VARCHAR (100) NOT NULL UNIQUE
+) INHERITS (base_table);
+
+-------- TABLE: users --------
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    passwd VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE
+) INHERITS (base_table);
+
+-------- TABLE: status_types --------
+CREATE TABLE status_types (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR (100) NOT NULL UNIQUE,
+    codename VARCHAR (100) NOT NULL UNIQUE
+) INHERITS (base_table);
 
 -------- TABLE: status --------
 CREATE TABLE status (
   id SERIAL PRIMARY KEY,
   name VARCHAR (100) NOT NULL UNIQUE,
   codename VARCHAR (100) NOT NULL UNIQUE,
-  id_types_status INT NOT NULL,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_status_types FOREIGN KEY (id_types_status) REFERENCES types_status (id) ON DELETE RESTRICT ON UPDATE CASCADE
-);
+  status_type_id INT NOT NULL,
+  
+  FOREIGN KEY (status_type_id) REFERENCES status_types (id) ON DELETE RESTRICT ON UPDATE CASCADE
+) INHERITS (base_table);
 
--------- TABLE: occupations --------
-CREATE TABLE occupations (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR (100) NOT NULL UNIQUE,
-  codename VARCHAR (100) NOT NULL UNIQUE,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-------- TABLE: priorities --------
+CREATE TABLE priorities (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR (100) NOT NULL UNIQUE,
+    codename VARCHAR (100) NOT NULL UNIQUE
+) INHERITS (base_table);
 
--------- TABLE: types_requests --------
-CREATE TABLE types_requests (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR (100) NOT NULL UNIQUE,
-  codename VARCHAR (100) NOT NULL UNIQUE,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-------- TABLE: request_types --------
+CREATE TABLE request_types (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR (100) NOT NULL UNIQUE,
+    codename VARCHAR (100) NOT NULL UNIQUE
+) INHERITS (base_table);
 
--------- TABLE: types_certificates --------
-CREATE TABLE types_certificates (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR (100) NOT NULL UNIQUE,
-  codename VARCHAR (100) NOT NULL UNIQUE,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-------- TABLE: supports --------
+CREATE TABLE supports (
+    id SERIAL PRIMARY KEY,
+    documents BYTEA,
+    reason TEXT NOT NULL,
+    observation TEXT
+) INHERITS (base_table);
 
--------- TABLE: users --------
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR (100) NOT NULL UNIQUE,
-  passwd VARCHAR (255) NOT NULL,
-  email VARCHAR (100) NOT NULL UNIQUE,
-  id_user_role INT NOT NULL,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_users_role FOREIGN KEY (id_user_role) REFERENCES users_role (id) ON DELETE RESTRICT ON UPDATE CASCADE
-);
+-------- TABLE: user_role --------
+CREATE TABLE user_role (
+user_id INT NOT NULL,
+role_id INT NOT NULL,
 
--------- TABLE: admins --------
-CREATE TABLE admins (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR (100) NOT NULL,
-  lastname VARCHAR (100) NOT NULL,
-  id_user INT NOT NULL,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_admins_user FOREIGN KEY (id_user) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
--------- TABLE: types_contracts --------
-CREATE TABLE types_contracts (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR (100) NOT NULL,
-  codename VARCHAR (100) NOT NULL UNIQUE,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+FOREIGN KEY (role_id) REFERENCES role(id) ON UPDATE CASCADE ON DELETE RESTRICT
+) INHERITS (base_table);
 
 -------- TABLE: departments --------
 CREATE TABLE departments (
   id SERIAL PRIMARY KEY,
   name VARCHAR (100) NOT NULL UNIQUE,
   codename VARCHAR (100) NOT NULL UNIQUE,
-  is_active BOOLEAN DEFAULT TRUE,
-  id_employee INT, -- 🔹 AHORA NULLABLE para que funcione ON DELETE SET NULL
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+  leader_id INT 
+) INHERITS (base_table);
 
 -------- TABLE: contracts --------
 CREATE TABLE contracts (
@@ -143,20 +130,18 @@ CREATE TABLE contracts (
   start_date DATE NOT NULL,
   end_date DATE,
   retire_date DATE,
-  id_status INT NOT NULL,
-  id_type_contract INT NOT NULL,
-  id_department INT NOT NULL,
-  id_occupation INT NOT NULL,
+  status_id INT NOT NULL,
+  contract_type_id INT NOT NULL,
+  department_id INT NOT NULL,
+  occupation_id INT NOT NULL,
   responsibilities TEXT NOT NULL,
   salary NUMERIC (12, 2) NOT NULL,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_contracts_department FOREIGN KEY (id_department) REFERENCES departments (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT fk_contracts_occupation FOREIGN KEY (id_occupation) REFERENCES occupations (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT fk_contracts_status FOREIGN KEY (id_status) REFERENCES status (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT fk_contracts_type_contract FOREIGN KEY (id_type_contract) REFERENCES types_contracts (id) ON DELETE RESTRICT ON UPDATE CASCADE
-);
+  
+  FOREIGN KEY (department_id) REFERENCES departments (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (occupation_id) REFERENCES occupations (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (status_id) REFERENCES status (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (contract_type_id) REFERENCES contract_types (id) ON DELETE RESTRICT ON UPDATE CASCADE
+) INHERITS(base_table);
 
 -------- TABLE: employees --------
 CREATE TABLE employees (
@@ -165,92 +150,35 @@ CREATE TABLE employees (
   lastname VARCHAR (100) NOT NULL,
   birthday DATE NOT NULL,
   identification VARCHAR (50) NOT NULL UNIQUE,
-  id_gender INT NOT NULL,
-  id_user INT NOT NULL,
-  id_contract INT,
-  id_status INT,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_employees_gender FOREIGN KEY (id_gender) REFERENCES genders (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT fk_employees_user FOREIGN KEY (id_user) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT fk_employees_status FOREIGN KEY (id_status) REFERENCES status (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT fk_employees_contract FOREIGN KEY (id_contract) REFERENCES contracts (id) ON DELETE SET NULL ON UPDATE CASCADE
-);
+  gender_id INT NOT NULL,
+  user_id INT NOT NULL,
+  contract_id INT,
+  status_id INT,
+  
+  FOREIGN KEY (gender_id) REFERENCES genders (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (status_id) REFERENCES status (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (contract_id) REFERENCES contracts (id) ON DELETE SET NULL ON UPDATE CASCADE
+) INHERITS(base_table);
 
------- clave foránea de departaments (agregada después para evitar dependencia circular)
+------ clave foránea de departaments ----------
 ALTER TABLE departments
-  ADD CONSTRAINT fk_department_employee FOREIGN KEY (id_employee) REFERENCES employees (id) ON DELETE SET NULL ON UPDATE CASCADE;
-
--------- TABLE: supports --------
-CREATE TABLE supports (
+  ADD CONSTRAINT fk_department_employee FOREIGN KEY (leader_id) REFERENCES employees (id) ON DELETE SET NULL ON UPDATE CASCADE;
+  
+-------- TABLE: requests --------
+CREATE TABLE requests (
   id SERIAL PRIMARY KEY,
-  documents BYTEA NOT NULL,
-  description TEXT,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--------- TABLE: priorities --------
-CREATE TABLE priorities (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR (100) NOT NULL,
-  codename VARCHAR (100) NOT NULL UNIQUE,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--------- TABLE: custom_requests --------
-CREATE TABLE custom_requests (
-  id SERIAL PRIMARY KEY,
-  id_employee INT NOT NULL,
-  id_type_request INT NOT NULL,
-  id_support INT NOT NULL,
-  id_status INT NOT NULL,
-  id_priority INT NOT NULL,
+  employee_id INT NOT NULL,
+  request_type_id INT NOT NULL,
+  support_id INT NOT NULL,
+  status_id INT NOT NULL,
+  priority_id INT NOT NULL,
   start_date DATE NOT NULL,
   end_date DATE,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_custom_requests_employee FOREIGN KEY (id_employee) REFERENCES employees (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT fk_custom_requests_type FOREIGN KEY (id_type_request) REFERENCES types_requests (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT fk_custom_requests_support FOREIGN KEY (id_support) REFERENCES supports (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT fk_custom_requests_status FOREIGN KEY (id_status) REFERENCES status (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT fk_custom_requests_priority FOREIGN KEY (id_priority) REFERENCES priorities (id) ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
--------- TABLE: certificates_requests --------
-CREATE TABLE certificates_requests (
-  id SERIAL PRIMARY KEY,
-  id_employee INT NOT NULL,
-  id_type_certificate INT NOT NULL,
-  id_status INT NOT NULL,
-  id_priority INT NOT NULL,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_certificates_requests_employee FOREIGN KEY (id_employee) REFERENCES employees (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT fk_certificates_requests_type FOREIGN KEY (id_type_certificate) REFERENCES types_certificates (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT fk_certificates_requests_status FOREIGN KEY (id_status) REFERENCES status (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT fk_certificates_requests_priority FOREIGN KEY (id_priority) REFERENCES priorities (id) ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
--------- TABLE: vacations --------
-CREATE TABLE vacations (
-  id SERIAL PRIMARY KEY,
-  id_employee INT NOT NULL,
-  description TEXT NOT NULL,
-  start_date DATE NOT NULL,
-  end_date DATE NOT NULL,
-  id_status INT NOT NULL,
-  id_priority INT NOT NULL,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_vacations_employee FOREIGN KEY (id_employee) REFERENCES employees (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT fk_vacations_status FOREIGN KEY (id_status) REFERENCES status (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT fk_vacations_priority FOREIGN KEY (id_priority) REFERENCES priorities (id) ON DELETE RESTRICT ON UPDATE CASCADE
-);
+  
+  FOREIGN KEY (employee_id) REFERENCES employees (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  FOREIGN KEY (request_type_id) REFERENCES request_types (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (status_id) REFERENCES status (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (support_id) REFERENCES supports (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (priority_id) REFERENCES priorities (id) ON DELETE SET NULL ON UPDATE CASCADE
+) INHERITS(base_table);
