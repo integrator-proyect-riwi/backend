@@ -182,3 +182,12 @@ CREATE TABLE requests (
   FOREIGN KEY (support_id) REFERENCES supports (id) ON DELETE SET NULL ON UPDATE CASCADE,
   FOREIGN KEY (priority_id) REFERENCES priorities (id) ON DELETE SET NULL ON UPDATE CASCADE
 ) INHERITS(base_table);
+
+-------- TABLA: certificate_requests --------
+CREATE TABLE certificate_requests (
+    request_id INT NOT NULL,
+    certificate_type_id INT NOT NULL,
+
+    FOREIGN KEY (request_id) REFERENCES requests (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (certificate_type_id) REFERENCES certificate_types (id) ON DELETE RESTRICT ON UPDATE CASCADE
+) INHERITS (base_table);
