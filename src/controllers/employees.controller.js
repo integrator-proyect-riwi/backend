@@ -1,44 +1,44 @@
-import Employee from "../models/employee.js";
-import Request from "../models/request.js";
-import RequestType from "../models/requestsType.js";
-import Status from "../models/status.js";
-import User from "../models/user.js";
-import Department from "../models/department.js";
-import Occupation from "../models/occupation.js";
-import Contract from "../models/contract.js";
+import Employee from '../models/employee.js';
+import Request from '../models/request.js';
+import RequestType from '../models/requestsType.js';
+import Status from '../models/status.js';
+import User from '../models/user.js';
+import Department from '../models/department.js';
+import Occupation from '../models/occupation.js';
+import Contract from '../models/contract.js';
 
 export const getEmployeeinformation = async (req, res) => {
   try {
     const employees = await Employee.findAll({
-      attributes: ["id", "name", "lastname", "identification"],
+      attributes: ['id', 'name', 'lastname', 'identification'],
       include: [
-        { model: Status, as: "status", attributes: ["name", "codename"] },
+        { model: Status, as: 'status', attributes: ['name', 'codename'] },
         {
           model: Contract,
-          as: "contract",
+          as: 'contract',
           include: [
-            { model: Department, as: "department", attributes: ["name", "codename"] },
-            { model: Occupation, as: "occupation", attributes: ["name", "codename"] },
-            { model: Status, as: "status", attributes: ["name", "codename"] }
+            { model: Department, as: 'department', attributes: ['name', 'codename'] },
+            { model: Occupation, as: 'occupation', attributes: ['name', 'codename'] },
+            { model: Status, as: 'status', attributes: ['name', 'codename'] }
           ]
         },
-        { model: User, as: "user", attributes: ["email", "username"] },
+        { model: User, as: 'user', attributes: ['email', 'username'] },
         {
           model: Request,
-          as: "requests",
+          as: 'requests',
           include: [
-            { model: Status, as: "status", attributes: ["codename"] },
-            { model: RequestType, as: "request_type", attributes: ["codename"] }
+            { model: Status, as: 'status', attributes: ['codename'] },
+            { model: RequestType, as: 'request_type', attributes: ['codename'] }
           ]
         }
       ]
     });
 
     const result = employees.map(emp => {
-      const solicitudesPendientes = emp.requests.filter(r => r.status.codename === "pending").length;
+      const solicitudesPendientes = emp.requests.filter(r => r.status.codename === 'pending').length;
 
       const diasVacacionesPendientes = emp.requests
-        .filter(r => r.request_type.codename === "vacation_request" && r.status.codename === "pending")
+        .filter(r => r.request_type.codename === 'vacation_request' && r.status.codename === 'pending')
         .reduce((sum, r) => {
           const inicio = new Date(r.start_date);
           const fin = new Date(r.end_date);
@@ -60,8 +60,8 @@ export const getEmployeeinformation = async (req, res) => {
 
     res.json(result);
   } catch (error) {
-    console.error("Error en getEmployeeVacationSummary:", error);
-    res.status(500).json({ error: "Error obteniendo resumen de empleados" });
+    console.error('Error en getEmployeeVacationSummary:', error);
+    res.status(500).json({ error: 'Error obteniendo resumen de empleados' });
   }
 };
 
@@ -92,13 +92,13 @@ export async function updateEmployee(req, res) {
     const employee = await Employee.findByPk(id);
 
     if (!employee) {
-      return res.status(404).json({ error: "Empleado no encontrado" });
+      return res.status(404).json({ error: 'Empleado no encontrado' });
     }
 
     await employee.update(req.body);
     res.json(employee);
   } catch (error) {
-    console.error("Error al actualizar empleado:", error);
+    console.error('Error al actualizar empleado:', error);
     res.status(400).json({ error: error.message });
   }
 }
