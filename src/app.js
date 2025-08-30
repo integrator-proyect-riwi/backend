@@ -6,7 +6,7 @@ import cors from 'cors';
 import { swaggerUi, swaggerDocument } from './config/swagger.js';
 
 // import routes from './routes/index.js';
-import { auth, employees, users } from './routes/index.js';
+import { auth, employees, requests, users } from './routes/index.js';
 import { verifyToken } from './middlewares/auth.middleware.js';
 
 // 
@@ -25,7 +25,7 @@ app.get('/api/v1/', async(req,res) => {
     res.send('Conectada')
 });
 
-//auth
+// auth
 app.use('/api/v1/auth', auth);
 
 // users
@@ -33,5 +33,8 @@ app.use('/api/v1/users', users);
 
 // employees
 app.use('/api/v1/employees', employees);
+
+// requests
+app.use('/api/v1/requests', requests);
 
 export default app;
