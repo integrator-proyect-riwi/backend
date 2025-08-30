@@ -18,7 +18,7 @@ export async function getUsers(req, res) {
       attributes: ['username', 'passwd', 'email'],
       include: [{
         model: Role,
-        as: 'role',
+        as: 'roles',
         attributes: ['name'],
         through: { attributes: [] }
       }]
@@ -35,14 +35,15 @@ export async function getUserById(req, res) {
     const id = req.params.id
     const user = await User.findOne({
       include: [{
-      model: Role,
-      as: 'role',
-      attributes: ['name']
-    }],
-    where:{
-      id: id
-    }
-  });
+        model: Role,
+        as: 'roles',
+        attributes: ['name'],
+        through: { attributes: [] }
+      }],
+      where: {
+        id: id
+      }
+    });
     if (!user) {
       res.status(404).json({ message: 'User not found' });
     };
