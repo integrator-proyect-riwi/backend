@@ -56,11 +56,12 @@ INSERT INTO occupations (name, codename) VALUES
 
 -- TABLE: users
 INSERT INTO users (username, passwd, email) VALUES
-('jdoe', 'pass123', 'jdoe@example.com'),
-('asmith', 'pass456', 'asmith@example.com'),
-('mmartinez', 'pass789', 'mmartinez@example.com'),
-('lgarcia', 'pass000', 'lgarcia@example.com'),
-('admin', 'admin123', 'admin@empresa.com');
+('jdoe', '$2b$10$Epgc5WFtDA5IjzuNdCbO2umKqxxm9KX.2w6uJ4GZZDJ/KX/y35pHC', 'jdoe@example.com'), --passwd: pass123
+('asmith', '$2b$10$Set.I/6tFki3KORLz2TCmeR65protBkQ7wfCz7RNetbDjsz5fQr5G', 'asmith@example.com'), --paswd: pass456
+('mmartinez', '$2b$10$cIVw6XLVEbMu50.UTLOQDuNlouO8YkwEDZ8wmjK7mFqM2jOj9on/G', 'mmartinez@example.com'),  --paswd: pass789
+('lgarcia', '$2b$10$uiDLeXdTqxiN/uVeriYwxOWzc2upGRSfb0nl2PgPMJu2K9iQnUj/O', 'lgarcia@example.com'),  --paswd: pass000
+('admin', '$2b$10$W6QRfupqvreMFgNyjP2ya.qIPf9maz2svCclkuZIKbIWLwj4wYV/a', 'admin@empresa.com'),  --paswd: admin123
+('empleado', '$2b$10$n1CU49p7HVNPKB4tF13oOOwQa/IieFY1SxpEyRWiwQrGh69Cw9cTO', 'empleado@empresa.com');  --paswd: empleado123
 
 -- TABLE: priorities
 INSERT INTO priorities (name, codename) VALUES
@@ -108,7 +109,8 @@ INSERT INTO employees (name, lastname, birthday, identification, gender_id, user
 ('John', 'Doe', '1990-05-25', '123456789', 1, 1, 1, 1),
 ('Anne', 'Smith', '1985-11-12', '987654321', 2, 2, 2, 1),
 ('Maria', 'Martinez', '1992-02-28', '112233445', 2, 3, 3, 1),
-('Luis', 'Garcia', '1995-07-01', '556677889', 1, 4, 1, 1);
+('Luis', 'Garcia', '1995-07-01', '556677889', 1, 4, 1, 1),
+('empleado', 'empleado', '1980-01-01', '222222222', 3, 6, 1, 1);
 
 -- We update department leaders now that there are employees
 UPDATE departments SET leader_id = 1 WHERE id = 1;
