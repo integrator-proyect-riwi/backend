@@ -6,7 +6,7 @@ import cors from 'cors';
 import { swaggerUi, swaggerDocument } from './config/swagger.js';
 
 // import routes from './routes/index.js';
-import { auth, users } from './routes/index.js';
+import { auth, employees, users } from './routes/index.js';
 import { verifyToken } from './middlewares/auth.middleware.js';
 
 // 
