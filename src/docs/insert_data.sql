@@ -313,7 +313,7 @@ VALUES
     -- jdoe is Employee
     (4, 2),
     -- asmith is Employee
-    (4, 2),
+    (5, 2),
     -- mmartinez is Employee
     (6, 2);
 
