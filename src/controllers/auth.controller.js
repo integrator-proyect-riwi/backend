@@ -37,42 +37,43 @@ export async function register(req, res) {
 //users login logic
 export async function login(req, res) {
     const { email, passwd } = req.body;
-    
+
     if (!email || !passwd) {
         return res.status(400).json({ error: 'Email and password are required' });
     };
     try {
         const user = await User.findOne({
-            where:{email},
-            include:{
+            where: { email },
+            include: [{
                 model: Role,
                 as: 'roles',
-                attributes:['name']
-            }
+                attributes: ['codename'],
+                through: { attributes: [] }
+            }]
         });
-        if(!user){
-            return res.status(401).json({error: 'Invalid credentials.'});
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials.' });
         };
-        
+
         const passwdMatch = await bcrypt.compare(passwd, user.passwd);
-        if(!passwdMatch){
-            return res.status(401).json({error: 'Invalid credentials.'});
+        if (!passwdMatch) {
+            return res.status(401).json({ error: 'Invalid credentials.' });
         };
 
         const token = jwt.sign(
-            {id: user.id, role: user.role},
+            { id: user.id, role: user.roles.map(r => r.codename) },
             process.env.JWT_SECRET,
-            {expiresIn: '1h'}
+            { expiresIn: '1h' }
         );
-        
-        res.status(200).json({ 
-            message: 'Login successful.',
-            token: token,
+
+        res.status(200).json({
+            message: "Login successful.",
+            token,
             user: {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                role: user.roles.name
+                roles: user.roles.map(r => r.codename)
             }
         });
     } catch (error) {
