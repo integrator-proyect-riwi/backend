@@ -1,9 +1,9 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
-import { baseFields } from "./baseModel.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
+import { baseFields } from './baseModel.js';
 
 
-const Priority = sequelize.define("priority", {
+const Priority = sequelize.define('priority', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -21,7 +21,7 @@ const Priority = sequelize.define("priority", {
   },
   ...baseFields,
 }, {
-  tableName: "priorities",
+  tableName: 'priorities',
   timestamps: false,
 });
 

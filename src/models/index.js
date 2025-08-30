@@ -1,36 +1,36 @@
-import sequelize from "../config/db.js";
+import sequelize from '../config/db.js';
 
-import Role from "./role.js";
-import Gender from "./gender.js";
-import ContractType from "./contractType.js";
-import Occupation from "./occupation.js";
-import CertificateType from "./certificateType.js";
-import User from "./user.js";
-import StatusType from "./statusType.js";
-import Status from "./status.js";
-import Priority from "./priority.js";
-import RequestType from "./requestsType.js";
-import Support from "./support.js";
-import UserRole from "./userRole.js";
-import Department from "./department.js";
-import Contract from "./contract.js";
-import Employee from "./employee.js";
-import Request from "./request.js";
-import CertificateRequest from "./certificateRequest.js";
+import Role from './role.js';
+import Gender from './gender.js';
+import ContractType from './contractType.js';
+import Occupation from './occupation.js';
+import CertificateType from './certificateType.js';
+import User from './user.js';
+import StatusType from './statusType.js';
+import Status from './status.js';
+import Priority from './priority.js';
+import RequestType from './requestsType.js';
+import Support from './support.js';
+import UserRole from './userRole.js';
+import Department from './department.js';
+import Contract from './contract.js';
+import Employee from './employee.js';
+import Request from './request.js';
+import CertificateRequest from './certificateRequest.js';
 
-import applyAssociations from "./associations.js";
+import applyAssociations from './associations.js';
 
 applyAssociations();
 
 const syncDB = async () => {
   try {
     await sequelize.authenticate();
-    console.log("Conexión establecida con la base de datos.");
+    console.log('Conexión establecida con la base de datos.');
 
     await sequelize.sync();
-    console.log("Tablas sincronizadas correctamente.");
+    console.log('Tablas sincronizadas correctamente.');
   } catch (error) {
-    console.error("Error al sincronizar la base de datos:", error);
+    console.error('Error al sincronizar la base de datos:', error);
   }
 };
 

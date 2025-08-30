@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
-import { baseFields } from "./baseModel.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
+import { baseFields } from './baseModel.js';
 
-const Request = sequelize.define("request", {
+const Request = sequelize.define('request', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -17,48 +17,48 @@ const Request = sequelize.define("request", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "employees",
-      key: "id",
+      model: 'employees',
+      key: 'id',
     },
   },
   request_type_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "request_types",
-      key: "id",
+      model: 'request_types',
+      key: 'id',
     },
   },
   support_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "supports",
-      key: "id",
+      model: 'supports',
+      key: 'id',
     },
   },
   status_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "status",
-      key: "id",
+      model: 'status',
+      key: 'id',
     },
   },
   priority_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "priorities",
-      key: "id",
+      model: 'priorities',
+      key: 'id',
     },
   },
   leader_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "employees",
-      key: "id",
+      model: 'employees',
+      key: 'id',
     },
   },
   start_date: {
@@ -71,7 +71,7 @@ const Request = sequelize.define("request", {
   },
   ...baseFields
 }, {
-  tableName: "requests",
+  tableName: 'requests',
   timestamps: false,
 });
 

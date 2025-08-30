@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
-import { baseFields } from "./baseModel.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
+import { baseFields } from './baseModel.js';
 
-const Gender = sequelize.define("gender", {
+const Gender = sequelize.define('gender', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -20,7 +20,7 @@ const Gender = sequelize.define("gender", {
   },
   ...baseFields,
 },  {
-  tableName: "genders",
+  tableName: 'genders',
   timestamps: false,
 });
 

@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
-import { baseFields } from "./baseModel.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
+import { baseFields } from './baseModel.js';
 
-const RequestType = sequelize.define("request_type", {
+const RequestType = sequelize.define('request_type', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -20,7 +20,7 @@ const RequestType = sequelize.define("request_type", {
   },
   ...baseFields,
 },  {
-  tableName: "request_types",
+  tableName: 'request_types',
   timestamps: false,
 });
 

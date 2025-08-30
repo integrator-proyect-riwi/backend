@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
-import { baseFields } from "./baseModel.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
+import { baseFields } from './baseModel.js';
 
-const Contract = sequelize.define("contract", {
+const Contract = sequelize.define('contract', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -24,32 +24,32 @@ const Contract = sequelize.define("contract", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "status",
-      key: "id",
+      model: 'status',
+      key: 'id',
     },
   },
   contract_type_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "contract_types",
-      key: "id",
+      model: 'contract_types',
+      key: 'id',
     },
   },
   department_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "departments",
-      key: "id",
+      model: 'departments',
+      key: 'id',
     },
   },
   occupation_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "occupations",
-      key: "id",
+      model: 'occupations',
+      key: 'id',
     },
   },
   responsibilities: {
@@ -62,7 +62,7 @@ const Contract = sequelize.define("contract", {
   },
   ...baseFields,
 }, {
-  tableName: "contracts",
+  tableName: 'contracts',
   timestamps: false,
 });
 

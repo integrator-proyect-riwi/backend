@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
-import { baseFields } from "./baseModel.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
+import { baseFields } from './baseModel.js';
 
-const CertificateType = sequelize.define("certificate_type", {
+const CertificateType = sequelize.define('certificate_type', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -20,7 +20,7 @@ const CertificateType = sequelize.define("certificate_type", {
   },
   ...baseFields,
 }, {
-  tableName: "certificate_types",
+  tableName: 'certificate_types',
   timestamps: false,
 });
 

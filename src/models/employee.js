@@ -1,9 +1,9 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
-import { baseFields } from "./baseModel.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
+import { baseFields } from './baseModel.js';
 
 
-const Employee = sequelize.define("employee", {
+const Employee = sequelize.define('employee', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -30,37 +30,37 @@ const Employee = sequelize.define("employee", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "genders",
-      key: "id",
+      model: 'genders',
+      key: 'id',
     },
   },
   user_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "users",
-      key: "id",
+      model: 'users',
+      key: 'id',
     },
   },
   contract_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "contracts",
-      key: "id",
+      model: 'contracts',
+      key: 'id',
     },
   },
   status_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "status",
-      key: "id",
+      model: 'status',
+      key: 'id',
     },
   },
   ...baseFields,
 }, {
-  tableName: "employees",
+  tableName: 'employees',
   timestamps: false,
 });
 

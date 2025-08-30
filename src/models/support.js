@@ -1,6 +1,6 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
-import { baseFields } from "./baseModel.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
+import { baseFields } from './baseModel.js';
 
 const Support = sequelize.define('support', {
     id: {
@@ -22,7 +22,7 @@ const Support = sequelize.define('support', {
     },
     ...baseFields,
 }, {
-    tableName: "supports",
+    tableName: 'supports',
     timestamps: false,
 });
 

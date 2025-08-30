@@ -1,6 +1,6 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
-import { baseFields } from "./baseModel.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
+import { baseFields } from './baseModel.js';
 
 const Department = sequelize.define('department', {
   id: {
@@ -23,8 +23,8 @@ const Department = sequelize.define('department', {
     unique: true,
     allowNull: true,
     references: {
-      model: "employees",
-      key: "id",
+      model: 'employees',
+      key: 'id',
     },
   },
   ...baseFields,

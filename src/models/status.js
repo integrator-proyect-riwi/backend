@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
-import { baseFields } from "./baseModel.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
+import { baseFields } from './baseModel.js';
 
-const Status = sequelize.define("status", {
+const Status = sequelize.define('status', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -22,13 +22,13 @@ const Status = sequelize.define("status", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "status_types",
-      key: "id",
+      model: 'status_types',
+      key: 'id',
     },
   },
   ...baseFields
 }, {
-  tableName: "status",
+  tableName: 'status',
   timestamps: false,
 });
 

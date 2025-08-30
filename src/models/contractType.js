@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/db.js";
-import { baseFields } from "./baseModel.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
+import { baseFields } from './baseModel.js';
 
-const ContractType = sequelize.define("contract_type", {
+const ContractType = sequelize.define('contract_type', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -20,7 +20,7 @@ const ContractType = sequelize.define("contract_type", {
   },
   ...baseFields
 },  {
-  tableName: "contract_types",
+  tableName: 'contract_types',
   timestamps: false,
 });
 
