@@ -1,16 +1,281 @@
 openapi: 3.0.0
 info:
-  title: API Backend RIWI
+  title: API - Request Management
   version: 1.0.0
-  description: Documentación de la API
+  description: API documentation with Swagger for Auth, Users, Employees and Requests.
+
 servers:
-  - url: http://localhost:3000/api
+  - url: http://localhost:3000/api/v1
+    description: Servidor local
+
 paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUser'
+      responses:
+        '201':
+          description: User successfully registered
+        '400':
+          description: Invalid input data
+
+  /auth/login:
+    post:
+      summary: User login
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUser'
+      responses:
+        '200':
+          description: Login successful
+        '401':
+          description: Invalid credentials
+
   /users:
     get:
-      summary: Obtiene todos los usuarios
-      tags:
-        - Usuarios
+      summary: Get all users
+      tags: [Users]
       responses:
-        200:
-          description: Lista de usuarios
+        '200':
+          description: List of users
+    post:
+      summary: Create a new user
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created
+
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      tags: [Users]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User found
+    patch:
+      summary: Update a user
+      tags: [Users]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated
+
+  /employees/info:
+    get:
+      summary: Get employees information
+      tags: [Employees]
+      responses:
+        '200':
+          description: Employees information
+
+  /employees:
+    get:
+      summary: Get all employees
+      tags: [Employees]
+      responses:
+        '200':
+          description: List of employees
+    post:
+      summary: Create a new employee
+      tags: [Employees]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '201':
+          description: Employee created
+
+  /employees/{id}:
+    put:
+      summary: Update an employee by ID
+      tags: [Employees]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':
+          description: Employee updated
+
+  /requests/total-requests:
+    get:
+      summary: Get total number of requests
+      tags: [Requests]
+      responses:
+        '200':
+          description: Total number of requests
+
+  /requests/requests-by-status:
+    get:
+      summary: Get requests grouped by status
+      tags: [Requests]
+      responses:
+        '200':
+          description: Requests grouped by status
+
+  /requests/last-requests:
+    get:
+      summary: Get last requests
+      tags: [Requests]
+      responses:
+        '200':
+          description: Recently created requests
+
+  /requests/type:
+    get:
+      summary: Get requests grouped by type
+      tags: [Requests]
+      responses:
+        '200':
+          description: Requests grouped by type
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: juanperez
+        email:
+          type: string
+          example: juan@example.com
+        passwd:
+          type: string
+          example: 123456
+
+    RegisterUser:
+      type: object
+      properties:
+        username:
+          type: string
+          example: juanperez
+        email:
+          type: string
+          example: juan@example.com
+        passwd:
+          type: string
+          example: 123456
+
+    LoginUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: juan@example.com
+        passwd:
+          type: string
+          example: 123456
+
+    Employee:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Juan
+        lastname:
+          type: string
+          example: Pérez
+        identification:
+          type: string
+          example: "123456789"
+        birthday:
+          type: string
+          format: date
+          example: "1990-01-01"
+        gender_id:
+          type: integer
+          example: 1
+        user_id:
+          type: integer
+          example: 2
+        contract_id:
+          type: integer
+          example: 3
+        status_id:
+          type: integer
+          example: 1
+
+    Request:
+      type: object
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+          example: REQ001
+        employee_id:
+          type: integer
+          example: 1
+        request_type_id:
+          type: integer
+          example: 2
+        support_id:
+          type: integer
+          example: 3
+        status_id:
+          type: integer
+          example: 1
+        priority_id:
+          type: integer
+          example: 2
+        leader_id:
+          type: integer
+          example: 4
+        start_date:
+          type: string
+          format: date
+          example: 2025-01-01
+        end_date:
+          type: string
+          format: date
+          nullable: true
+          example: 2025-01-15
