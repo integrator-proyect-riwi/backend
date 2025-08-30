@@ -65,9 +65,7 @@ INSERT INTO users (username, passwd, email) VALUES
 
 -- TABLE: priorities
 INSERT INTO priorities (name, codename) VALUES
-('Low', 'low'),
-('Medium', 'medium'),
-('High', 'high'),
+('Normal', 'normal'),
 ('Urgent', 'urgent');
 
 -- TABLE: request_types
