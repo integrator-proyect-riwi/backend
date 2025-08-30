@@ -23,7 +23,15 @@ export async function getUsers(req, res) {
         through: { attributes: [] }
       }]
     });
-    res.json(users);
+
+    const simplifiedUsers = users.map(user => ({
+      username: user.username,
+      passwd: user.passwd,
+      email: user.email,
+      roles: user.roles.map(r => r.name).join(', ')   // ["Empleado", "Admin"]
+    }));
+
+    res.json(simplifiedUsers);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -50,5 +58,25 @@ export async function getUserById(req, res) {
     res.status(201).json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+}
+
+// Editar usuario parcialmente (PATCH)
+export async function updateUser(req, res) {
+  try {
+    const id = req.params.id;
+
+    // Verificar si el usuario existe
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Actualizar solo los campos enviados en el body
+    await user.update(req.body);
+
+    res.json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 }
