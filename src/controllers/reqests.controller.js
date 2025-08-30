@@ -1,9 +1,10 @@
-import { fn, col, literal } from 'sequelize';
+import { fn, col } from 'sequelize';
+import { generateRequestCode, getUserFromToken, findLeader, createSupport } from '../utils/index.js';
 import Request from '../models/request.js';
 import Status from '../models/status.js';
 import Employee from '../models/employee.js';
 import RequestType from '../models/requestsType.js';
-import Priority from '../models/priority.js'
+import Priority from '../models/priority.js';
 
 export async function totalRequests(req, res) {
     try {
@@ -27,11 +28,9 @@ export async function requestsByStatus(req, res) {
             attributes: [
                 [fn('COUNT', col('request.id')), 'total']
             ],
-            include: [{
-                model: Status,
-                as: 'status',
-                attributes: ['codename']
-            }],
+            include: [
+                { model: Status, as: 'status', attributes: ['codename'] }
+            ],
             group: ['status.id', 'status.codename']
         });
 
@@ -68,7 +67,7 @@ export async function lastRequests(req, res) {
             ],
             order: [['created_at', 'DESC']],
             limit: 4,
-            raw: true  
+            raw: true
         });
 
         if (requests.length === 0) {
@@ -79,5 +78,92 @@ export async function lastRequests(req, res) {
 
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+}
+
+export async function createRequest(req, res) {
+    const t = await Request.sequelize.transaction();
+
+    try {
+        const user = getUserFromToken(req.headers.authorization);
+        if (!user) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+
+        const employee = await Employee.findOne({ where: { user_id: user.id } });
+        if (!employee) {
+            return res.status(404).json({ error: 'Employee not found for this user' });
+        }
+
+        const {
+            request_type,
+            leader,
+            priority_id,
+            start_date,
+            end_date,
+            reason,
+            observations,
+        } = req.body;
+
+        if (!request_type || !leader || !reason || !start_date || !end_date) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        if (new Date(start_date) > new Date(end_date)) {
+            return res.status(400).json({ error: 'Start date cannot be after end date' });
+        }
+
+        const reqType = await RequestType.findOne({ where: { codename: request_type } });
+        if (!reqType) {
+            return res.status(400).json({ error: 'Invalid request type' });
+        }
+
+        const pendingStatus = await Status.findOne({ where: { codename: 'pending' } });
+        if (!pendingStatus) {
+            return res.status(404).json({ error: 'Status not found' });
+        }
+
+        const leaderRow = await findLeader(leader);
+        if (!leaderRow) {
+            return res.status(404).json({ error: 'Leader not found' });
+        }
+
+        const priority = await Priority.findOne({ where: { codename: priority_id || 'normal' } });
+        if (!priority) {
+            return res.status(404).json({ error: 'Priority not found' });
+        }
+
+        const code = await generateRequestCode(t);
+
+        const support = await createSupport({
+            file: req.file || null,
+            reason: reason,
+            observations,
+            transaction: t
+        });
+
+        const newRequest = await Request.create({
+            code,
+            employee_id: employee.id,
+            request_type_id: reqType.id,
+            status_id: pendingStatus.id,
+            priority_id: priority.id,
+            leader_id: leaderRow.id,
+            support_id: support.id,
+            start_date,
+            end_date
+        }, { transaction: t });
+
+        await t.commit();
+
+        res.status(201).json({
+            message: 'Request created successfully',
+            newRequest
+        });
+
+    } catch (error) {
+        if (!t.finished) await t.rollback();
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error.' });
     }
 }
