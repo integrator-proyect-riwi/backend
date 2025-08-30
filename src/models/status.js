@@ -21,6 +21,10 @@ const Status = sequelize.define("status", {
   status_type_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: "status_types",
+      key: "id",
+    },
   },
   ...baseFields
 }, {

@@ -22,6 +22,10 @@ const Department = sequelize.define('department', {
     type: DataTypes.INTEGER,
     unique: true,
     allowNull: true,
+    references: {
+      model: "employees",
+      key: "id",
+    },
   },
   ...baseFields,
 }, {

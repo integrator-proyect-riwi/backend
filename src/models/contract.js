@@ -22,19 +22,35 @@ const Contract = sequelize.define("contract", {
   },
   status_id: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: "status",
+      key: "id",
+    },
   },
   contract_type_id: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: "contract_types",
+      key: "id",
+    },
   },
   department_id: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: "departments",
+      key: "id",
+    },
   },
   occupation_id: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: "occupations",
+      key: "id",
+    },
   },
   responsibilities: {
     type: DataTypes.TEXT,

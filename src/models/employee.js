@@ -29,18 +29,34 @@ const Employee = sequelize.define("employee", {
   gender_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: "genders",
+      key: "id",
+    },
   },
   user_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: "users",
+      key: "id",
+    },
   },
   contract_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: "contracts",
+      key: "id",
+    },
   },
   status_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: "status",
+      key: "id",
+    },
   },
   ...baseFields,
 }, {
