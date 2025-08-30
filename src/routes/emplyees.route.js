@@ -1,0 +1,19 @@
+// routes/employees.js
+import { Router } from "express";
+import { getEmployeeinformation, createEmployee, getEmployee, updateEmployee} from "../controllers/employees.controller.js";
+
+const router = Router();
+
+// Defines the route to obtain information about all employees
+router.get("/info", getEmployeeinformation);
+
+// Defines the route to get all employees
+router.get("/", getEmployee);
+
+// Defines the path to create a new employee
+router.post("/", createEmployee);
+
+// Defines the path to update an employee by ID
+router.put("/:id", updateEmployee);
+
+export default router;

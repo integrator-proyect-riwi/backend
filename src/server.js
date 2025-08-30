@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 import app from './app.js';
-
 import { syncDB } from './models/index.js';
 
 // Load environment variables

@@ -31,4 +31,7 @@ app.use('/api/v1/auth', auth);
 // users
 app.use('/api/v1/users', users);
 
+// employees
+app.use('/api/v1/employees', employees);
+
 export default app;
