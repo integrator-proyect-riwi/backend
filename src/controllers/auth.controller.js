@@ -5,11 +5,9 @@ import Role from '../models/role.js';
 
 //users registration logic
 export async function register(req, res) {
-    const { username, passwd, email } = req.body;
+    const { username, passwd, email, role } = req.body;
 
-    if (!username || !passwd || !email) {
-        return res.status(400).json({ error: 'all fields are required.' })
-    };
+    if (!username || !passwd || !email) return res.status(400).json({ error: 'all fields are required.' });
     try {
         const saltRount = 10;
         const hashedPasswd = await bcrypt.hash(passwd, saltRount);
@@ -18,29 +16,39 @@ export async function register(req, res) {
             username,
             email,
             passwd: hashedPasswd,
-            id_user_role: 2 // defautl role
         });
+
+        const roleCodename = role && role.toLowerCase() === 'admin' ? 'admin' : 'employee';
+
+        const roleRecords = await Role.findAll({
+            where: { codename: roleCodename }
+        });
+
+        if (!roleRecords || roleRecords.length === 0) return res.status(400).json({ error: 'Roles not found.' });
+
+        const roleRecord = roleRecords[0];
+
+        await newUser.setRoles([roleRecord.id]);
 
         res.status(201).json({
             message: 'User successfully registered.',
-            user: newUser
+            user: {
+                username: newUser.username,
+                email: newUser.email,
+            },
         });
     } catch (error) {
-        if (error === 'SequelizeUniqueConstraintError') {
-            return res.status(400).json({ error: 'The email or username already exists.' });
-        };
+        if (error === 'SequelizeUniqueConstraintError') return res.status(400).json({ error: 'The email or username already exists.' });
         console.error(error);
         res.status(500).json({ error: 'Internal server error.' });
-    };
-};
+    }
+}
 
 //users login logic
 export async function login(req, res) {
     const { email, passwd } = req.body;
 
-    if (!email || !passwd) {
-        return res.status(400).json({ error: 'Email and password are required' });
-    };
+    if (!email || !passwd) return res.status(400).json({ error: 'Email and password are required' });
     try {
         const user = await User.findOne({
             where: { email },
@@ -51,33 +59,53 @@ export async function login(req, res) {
                 through: { attributes: [] }
             }]
         });
-        if (!user) {
-            return res.status(401).json({ error: 'Invalid credentials.' });
-        };
+        if (!user) return res.status(401).json({ error: 'Invalid credentials.' });
 
         const passwdMatch = await bcrypt.compare(passwd, user.passwd);
-        if (!passwdMatch) {
-            return res.status(401).json({ error: 'Invalid credentials.' });
-        };
+        if (!passwdMatch) return res.status(401).json({ error: 'Invalid credentials.' });
+
+        const role = user.roles.length === 1 ? user.roles[0].codename : user.roles.map(r => r.codename);
 
         const token = jwt.sign(
-            { id: user.id, role: user.roles.map(r => r.codename) },
+            { id: user.id, role: role },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
+
 
         res.status(200).json({
             message: "Login successful.",
             token,
             user: {
-                id: user.id,
                 username: user.username,
                 email: user.email,
-                roles: user.roles.map(r => r.codename)
             }
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error.' });
-    };
-};
+    }
+}
+
+export async function logout(req, res) {
+    try {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader) {
+            return res.status(400).json({ error: 'No token provided.' });
+        }
+
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return res.status(400).json({ error: 'Malformed token.' });
+        }
+
+        res.clearCookie('token');
+        return res.status(200).json({
+            message: 'Logout successful. Please remove your token in your client side'
+        })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+}

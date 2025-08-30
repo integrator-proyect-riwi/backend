@@ -140,7 +140,7 @@ CREATE TABLE request_types (
 CREATE TABLE supports (
   id SERIAL PRIMARY KEY,
   documents BYTEA,
-  reason TEXT NOT NULL,
+  description TEXT NOT NULL,
   observation TEXT,
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

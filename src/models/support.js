@@ -12,7 +12,7 @@ const Support = sequelize.define('support', {
         type: DataTypes.BLOB,
         allowNull: true,
     },
-    reason: {
+    description: {
         type: DataTypes.TEXT,
         allowNull: false,
     },
