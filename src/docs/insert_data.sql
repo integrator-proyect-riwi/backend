@@ -22,37 +22,37 @@ RESTART IDENTITY CASCADE;
 -- execute INSERTs normally
 -- TABLE: role
 INSERT INTO role (name, codename) VALUES
-('Administrador', 'admin'),
-('Empleado', 'employee');
+('Administrator', 'admin'),
+('Employee', 'employee');
 
 -- TABLE: genders
 INSERT INTO genders (name, codename) VALUES
-('Masculino', 'male'),
-('Femenino', 'female'),
-('Otro', 'other');
+('Male', 'male'),
+('Female', 'female'),
+('Other', 'other');
 
 -- TABLE: status_types
 INSERT INTO status_types (name, codename) VALUES
-('Estado de Empleado', 'employee_status'),
-('Estado de Contrato', 'contract_status'),
-('Estado de Solicitud', 'request_status');
+('Employee Status', 'employee_status'),
+('Contract Status', 'contract_status'),
+('Application Status', 'request_status');
 
 -- TABLE: status
 INSERT INTO status (name, codename, status_type_id) VALUES
-('Activo', 'active', 1),
-('Inactivo', 'inactive', 1),
-('Pendiente', 'pending', 3),
-('Aprobado', 'approved', 3),
-('Rechazado', 'rejected', 3),
-('Vigente', 'in_effect', 2),
-('Terminado', 'terminated', 2);
+('Active', 'active', 1),
+('Inactive', 'inactive', 1),
+('Pending', 'pending', 3),
+('Approved', 'approved', 3),
+('Rejected', 'rejected', 3), 
+('Current', 'current', 2),
+('Finalized', 'finalized', 2);
 
 -- TABLE: occupations
 INSERT INTO occupations (name, codename) VALUES
-('Ingeniero de Software', 'software_engineer'),
-('Analista de Datos', 'data_analyst'),
-('Diseñador UX/UI', 'ux_ui_designer'),
-('Gerente de Proyectos', 'project_manager');
+('Software Engineer', 'software_engineer'),
+('Data Analyst', 'data_analyst'),
+('UX/UI Designer', 'ux_ui_designer'),
+('Project Manager', 'project_manager');
 
 -- TABLE: users
 INSERT INTO users (username, passwd, email) VALUES
@@ -60,49 +60,49 @@ INSERT INTO users (username, passwd, email) VALUES
 ('asmith', '$2b$10$Set.I/6tFki3KORLz2TCmeR65protBkQ7wfCz7RNetbDjsz5fQr5G', 'asmith@example.com'), --paswd: pass456
 ('mmartinez', '$2b$10$cIVw6XLVEbMu50.UTLOQDuNlouO8YkwEDZ8wmjK7mFqM2jOj9on/G', 'mmartinez@example.com'),  --paswd: pass789
 ('lgarcia', '$2b$10$uiDLeXdTqxiN/uVeriYwxOWzc2upGRSfb0nl2PgPMJu2K9iQnUj/O', 'lgarcia@example.com'),  --paswd: pass000
-('admin', '$2b$10$W6QRfupqvreMFgNyjP2ya.qIPf9maz2svCclkuZIKbIWLwj4wYV/a', 'admin@empresa.com'),  --paswd: admin123
-('empleado', '$2b$10$n1CU49p7HVNPKB4tF13oOOwQa/IieFY1SxpEyRWiwQrGh69Cw9cTO', 'empleado@empresa.com');  --paswd: empleado123
+('admin', '$2b$10$W6QRfupqvreMFgNyjP2ya.qIPf9maz2svCclkuZIKbIWLwj4wYV/a', 'admin@enterprise.com'),  --paswd: admin123
+('empleado', '$2b$10$n1CU49p7HVNPKB4tF13oOOwQa/IieFY1SxpEyRWiwQrGh69Cw9cTO', 'empleado@enterprise.com');  --paswd: empleado123
 
 -- TABLE: priorities
 INSERT INTO priorities (name, codename) VALUES
-('Baja', 'low'),
-('Media', 'medium'),
-('Alta', 'high'),
-('Urgente', 'urgent');
+('Low', 'low'),
+('Medium', 'medium'),
+('High', 'high'),
+('Urgent', 'urgent');
 
 -- TABLE: request_types
 INSERT INTO request_types (name, codename) VALUES
-('Solicitud de Certificado', 'certificate_request'),
-('Solicitud de Licencia', 'leave_request'),
-('Solicitud de Vacaciones', 'vacation_request');
+('Certificate Request', 'certificate_request'),
+('License Application', 'license_request'),
+('Vacation Request', 'vacation_request');
 
 -- TABLE: certificate_types
 INSERT INTO certificate_types (name, codename) VALUES
-('Certificado de Empleo', 'employment_certificate'),
-('Certificado de Ingresos', 'income_certificate');
+('Employment Certificate', 'employment_certificate'),
+('Certificate of Income', 'income_certificate');
 
 -- TABLE: supports
 INSERT INTO supports (documents, reason, observation) VALUES
-(E'\\x', 'Necesito un certificado para el banco.', 'Sin observaciones'),
-(E'\\x', 'Solicito permiso por motivos personales.', 'Urgente');
+(E'\\x', 'I need a certificate for the bank.', 'No observations'),
+(E'\\x', 'I request permission for personal reasons.', 'Urgent');
 
 -- TABLE: contract_types
 INSERT INTO contract_types (name, codename) VALUES
-('Tiempo completo', 'full_time'),
-('Medio tiempo', 'part_time'),
-('Temporal', 'temporary');
+('Full time', 'full_time'),
+('Half-time', 'half_time'),
+('Part time', 'part_time');
 
 -- TABLE: departments
 INSERT INTO departments (name, codename, leader_id) VALUES
-('Departamento de Ingeniería', 'engineering_dept', NULL),
-('Departamento de RRHH', 'hr_dept', NULL),
-('Departamento de Marketing', 'marketing_dept', NULL);
+('Engineering Department', 'engineering_dept', NULL),
+('HR Department', 'hr_dept', NULL),
+('Marketing Department', 'marketing_dept', NULL);
 
 -- TABLE: contracts
 INSERT INTO contracts (start_date, end_date, retire_date, status_id, contract_type_id, department_id, occupation_id, responsibilities, salary) VALUES
-('2023-01-15', NULL, NULL, 6, 1, 1, 1, 'Desarrollo de software', 50000.00),
-('2023-03-20', NULL, NULL, 6, 1, 2, 2, 'Análisis de datos de personal', 45000.00),
-('2023-05-10', NULL, NULL, 6, 2, 3, 3, 'Diseño de campañas', 35000.00);
+('2023-01-15', NULL, NULL, 6, 1, 1, 1, 'Software development', 50000.00),
+('2023-03-20', NULL, NULL, 6, 1, 2, 2, 'Personnel data analysis', 45000.00),
+('2023-05-10', NULL, NULL, 6, 2, 3, 3, 'Campaign design', 35000.00);
 
 -- TABLE: employees
 INSERT INTO employees (name, lastname, birthday, identification, gender_id, user_id, contract_id, status_id) VALUES
@@ -119,12 +119,12 @@ UPDATE departments SET leader_id = 3 WHERE id = 3;
 
 -- TABLE: user_role
 INSERT INTO user_role (user_id, role_id) VALUES
-(1, 1), -- jdoe es Administrador
-(1, 2), -- jdoe es Empleado
-(2, 2), -- asmith es Empleado
-(3, 2), -- mmartinez es Empleado
-(4, 2), -- lgarcia es Empleado
-(5, 1); -- admin es Administrado
+(1, 1), -- jdoe es Administrator
+(1, 2), -- jdoe es Employee
+(2, 2), -- asmith es Employee
+(3, 2), -- mmartinez es Employee
+(4, 2), -- lgarcia es Employee
+(5, 1); -- admin es Administrator
 
 -- TABLE: reuqests
 INSERT INTO requests (code, employee_id, request_type_id, support_id, status_id, priority_id, leader_id, start_date, end_date) VALUES
