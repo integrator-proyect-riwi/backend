@@ -19,11 +19,11 @@ import CertificateRequest from "./certificateRequest.js";
 const applyAssociations = () => {
 
     //User <-> Role (Many-to-Many)
-    User.belongsToMany(Role, { through: UserRole, foreignKey: "user_id", as: "role" });
-    Role.belongsToMany(User, { through: UserRole, foreignKey: "role_id", as: "user" });
+    User.belongsToMany(Role, { through: UserRole, foreignKey: "user_id", as: "roles" });
+    Role.belongsToMany(User, { through: UserRole, foreignKey: "role_id", as: "users" });
 
     // StatusType -> Status (1:N)
-    StatusType.hasMany(Status, { foreignKey: "status_type_id", as: "status" });
+    StatusType.hasMany(Status, { foreignKey: "status_type_id", as: "statuses" });
     Status.belongsTo(StatusType, { foreignKey: "status_type_id", as: "status_type" });
 
     // Department -> Employee (líder) (1:1)
@@ -31,19 +31,19 @@ const applyAssociations = () => {
     Employee.hasOne(Department, { foreignKey: "leader_id", as: "department_leaded" });
 
     // ContractType -> Contract (1:N)
-    ContractType.hasMany(Contract, { foreignKey: "contract_type_id", as: "contract" });
+    ContractType.hasMany(Contract, { foreignKey: "contract_type_id", as: "contracts" });
     Contract.belongsTo(ContractType, { foreignKey: "contract_type_id", as: "contract_type" });
 
     // Occupation -> Contract (1:N)
-    Occupation.hasMany(Contract, { foreignKey: "occupation_id", as: "contract" });
+    Occupation.hasMany(Contract, { foreignKey: "occupation_id", as: "contracts" });
     Contract.belongsTo(Occupation, { foreignKey: "occupation_id", as: "occupation" });
 
     // Department -> Contract (1:N)
-    Department.hasMany(Contract, { foreignKey: "department_id", as: "contract" });
+    Department.hasMany(Contract, { foreignKey: "department_id", as: "contracts" });
     Contract.belongsTo(Department, { foreignKey: "department_id", as: "department" });
 
     // Status -> Contract (1:N)
-    Status.hasMany(Contract, { foreignKey: "status_id", as: "contract" });
+    Status.hasMany(Contract, { foreignKey: "status_id", as: "contracts" });
     Contract.belongsTo(Status, { foreignKey: "status_id", as: "status" });
 
     // User -> Employee (1:1)
@@ -51,39 +51,39 @@ const applyAssociations = () => {
     Employee.belongsTo(User, { foreignKey: "user_id", as: "user" });
 
     // Gender -> Employee (1:N)
-    Gender.hasMany(Employee, { foreignKey: "gender_id", as: "employee" });
+    Gender.hasMany(Employee, { foreignKey: "gender_id", as: "employees" });
     Employee.belongsTo(Gender, { foreignKey: "gender_id", as: "gender" });
 
     // Contract -> Employee (1:N) (opcional)
-    Contract.hasMany(Employee, { foreignKey: "contract_id", as: "employee" });
+    Contract.hasMany(Employee, { foreignKey: "contract_id", as: "employees" });
     Employee.belongsTo(Contract, { foreignKey: "contract_id", as: "contract" });
 
     // Status -> Employee (1:N)
-    Status.hasMany(Employee, { foreignKey: "status_id", as: "employee" });
+    Status.hasMany(Employee, { foreignKey: "status_id", as: "employees" });
     Employee.belongsTo(Status, { foreignKey: "status_id", as: "status" });
 
     // Employee -> Request (1:N)
-    Employee.hasMany(Request, { foreignKey: "employee_id", as: "request" });
+    Employee.hasMany(Request, { foreignKey: "employee_id", as: "requests" });
     Request.belongsTo(Employee, { foreignKey: "employee_id", as: "employee" });
 
     // RequestType -> Request (1:N)
-    RequestType.hasMany(Request, { foreignKey: "request_type_id", as: "request" });
+    RequestType.hasMany(Request, { foreignKey: "request_type_id", as: "requests" });
     Request.belongsTo(RequestType, { foreignKey: "request_type_id", as: "request_type" });
 
     // Support -> Request (1:N)
-    Support.hasMany(Request, { foreignKey: "support_id", as: "request" });
+    Support.hasMany(Request, { foreignKey: "support_id", as: "requests" });
     Request.belongsTo(Support, { foreignKey: "support_id", as: "support" });
 
     // Status -> Request (1:N)
-    Status.hasMany(Request, { foreignKey: "status_id", as: "request" });
+    Status.hasMany(Request, { foreignKey: "status_id", as: "requests" });
     Request.belongsTo(Status, { foreignKey: "status_id", as: "status" });
 
     // Priority -> Request (1:N)
-    Priority.hasMany(Request, { foreignKey: "priority_id", as: "request" });
+    Priority.hasMany(Request, { foreignKey: "priority_id", as: "requests" });
     Request.belongsTo(Priority, { foreignKey: "priority_id", as: "priority" });
 
     // Employee (líder) -> Request (1:N)
-    Employee.hasMany(Request, { foreignKey: "leader_id", as: "leader_request" });
+    Employee.hasMany(Request, { foreignKey: "leader_id", as: "leader_requests" });
     Request.belongsTo(Employee, { foreignKey: "leader_id", as: "leader" });
 
     // CertificateType <-> Request (Many-to-Many)
