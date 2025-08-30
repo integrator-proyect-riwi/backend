@@ -34,7 +34,4 @@ app.use('/api/v1/users', users);
 // employees
 app.use('/api/v1/employees', employees);
 
-// certificates
-// app.use('/api/v1/certificates', certificates);
-
 export default app;

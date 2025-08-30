@@ -1,20 +1,19 @@
+// routes/employees.js
 import { Router } from "express";
-// import { getBillings, getBillingId, createBilling, editBilling, deleteBilling } from "../controllers/billing.controller.js";
+import { getEmployeeinformation, createEmployee, getEmployee, updateEmployee} from "../controllers/employees.controller.js";
 
 const router = Router();
 
-router.get('/', (req, res) => {
-    res.send('Todos los trabajadores')
-});
-router.get('/:id/history', () => {
-    // 👉 Devuelve:
-    // Datos básicos del colaborador.
-    // Timeline de cambios (ascensos, traslados).
-    // Consolidado de solicitudes (vacaciones, permisos, certificados).
-});
+// Defines the route to obtain information about all employees
+router.get("/info", getEmployeeinformation);
 
-router.get('/employees/:id/history/vacations' , () => {})
-router.get('/employees/:id/history/permissions' , () => {})
-router.get('/employees/:id/history/certificates' , () => {})
+// Defines the route to get all employees
+router.get("/", getEmployee);
+
+// Defines the path to create a new employee
+router.post("/", createEmployee);
+
+// Defines the path to update an employee by ID
+router.put("/:id", updateEmployee);
 
 export default router;
