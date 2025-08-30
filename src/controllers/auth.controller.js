@@ -46,7 +46,7 @@ export async function login(req, res) {
             where:{email},
             include:{
                 model: Role,
-                as: 'role',
+                as: 'roles',
                 attributes:['name']
             }
         });
@@ -54,7 +54,7 @@ export async function login(req, res) {
             return res.status(401).json({error: 'Invalid credentials.'});
         };
         
-        const passwdMatch = await bcrypt.compare(passwd, user.passwd)|| passwd === user.passwd;
+        const passwdMatch = await bcrypt.compare(passwd, user.passwd);
         if(!passwdMatch){
             return res.status(401).json({error: 'Invalid credentials.'});
         };
@@ -72,7 +72,7 @@ export async function login(req, res) {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                role: user.role.name
+                role: user.roles.name
             }
         });
     } catch (error) {
