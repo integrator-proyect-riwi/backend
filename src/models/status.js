@@ -29,7 +29,9 @@ const Status = sequelize.define('status', {
   ...baseFields
 }, {
   tableName: 'status',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
 });
 
 export default Status;

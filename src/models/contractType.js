@@ -19,9 +19,11 @@ const ContractType = sequelize.define('contract_type', {
     allowNull: false,
   },
   ...baseFields
-},  {
+}, {
   tableName: 'contract_types',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
 });
 
 export default ContractType;

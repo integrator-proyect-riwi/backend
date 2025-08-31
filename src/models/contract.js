@@ -63,7 +63,9 @@ const Contract = sequelize.define('contract', {
   ...baseFields,
 }, {
   tableName: 'contracts',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
 });
 
 export default Contract;

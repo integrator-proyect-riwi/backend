@@ -19,9 +19,11 @@ const RequestType = sequelize.define('request_type', {
     allowNull: false,
   },
   ...baseFields,
-},  {
+}, {
   tableName: 'request_types',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
 });
 
 export default RequestType;

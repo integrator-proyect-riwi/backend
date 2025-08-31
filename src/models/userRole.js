@@ -22,7 +22,9 @@ const UserRole = sequelize.define('user_role', {
   ...baseFields,
 }, {
   tableName: 'user_role',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
 });
 
 export default UserRole;

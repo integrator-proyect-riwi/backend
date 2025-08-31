@@ -39,7 +39,7 @@ INSERT INTO
 VALUES
     ('Employee Status', 'employee_status'),
     ('Contract Status', 'contract_status'),
-    ('Application Status', 'request_status');
+    ('Request Status', 'request_status');
 
 -- TABLE: status
 INSERT INTO

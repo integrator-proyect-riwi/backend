@@ -19,9 +19,11 @@ const StatusType = sequelize.define('status_type', {
     allowNull: false,
   },
   ...baseFields,
-},  {
+}, {
   tableName: 'status_types',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
 });
 
 export default StatusType;

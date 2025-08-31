@@ -1,6 +1,6 @@
-import { fn, col, literal } from 'sequelize';
+import { fn, col, literal, where } from 'sequelize';
 import { generateRequestCode, getUserFromToken, findLeader, createSupport } from '../utils/index.js';
-import { Request, Status, Employee, RequestType, Priority, Department, Contract } from '../models/index.js';
+import { Request, Status, Employee, RequestType, Priority, Department, Contract, StatusType } from '../models/index.js';
 
 export async function totalRequests(req, res) {
     try {
@@ -105,7 +105,6 @@ export async function requestsByType(req, res) {
         res.status(500).json({ error: error.message });
     }
 }
-
 
 export async function createRequest(req, res) {
     const t = await Request.sequelize.transaction();
@@ -253,7 +252,38 @@ export async function getRequests(req, res) {
             raw: true
         });
 
-        res.status(201).json({requests});
+        res.status(201).json({ requests });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+}
+
+export async function updateStatusRequest(req, res) {
+    try {
+        const { code } = req.params;
+        const { codename } = req.body;
+
+        const status = await Status.findOne({
+            where: { codename },
+            include: [{
+                model: StatusType,
+                as: 'status_type',
+                where: { codename: 'request_status'}
+            }]
+        });
+        if (!status) return res.status(400).json({ error: `Status "${codename}" not valid for requests` });
+
+        const request = await Request.findOne({ where: { code } });
+        if (!request) return res.status(404).json({ error: 'Request not found' });
+
+        console.log('antes de actualizar', request.updated_at);
+
+        const updatedRequest = await Request.update({ status_id: status.id }, { where: { code }, returning: true });
+
+        console.log('antes de actualizar', updatedRequest.updated_at);
+
+        res.status(201).json({ message: 'Status updated successfully.', request: updatedRequest });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error.' });

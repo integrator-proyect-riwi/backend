@@ -4,10 +4,10 @@ import { baseFields } from './baseModel.js';
 
 const CertificateRequest = sequelize.define('certificate_request', {
     request_id: {
-        type: DataTypes.INTEGER, 
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'requests',       
+            model: 'requests',
             key: 'id',
         },
     },
@@ -22,7 +22,9 @@ const CertificateRequest = sequelize.define('certificate_request', {
     ...baseFields,
 }, {
     tableName: 'certificate_requests',
-    timestamps: false,
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
 });
 
 export default CertificateRequest;

@@ -22,7 +22,9 @@ const Priority = sequelize.define('priority', {
   ...baseFields,
 }, {
   tableName: 'priorities',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
 });
 
 export default Priority;
