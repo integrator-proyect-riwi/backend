@@ -48,6 +48,9 @@ export async function register(req, res) {
 export async function login(req, res) {
     const { email, passwd } = req.body;
 
+    console.log(email, passwd);
+    
+
     if (!email || !passwd) return res.status(400).json({ error: 'Email and password are required' });
     try {
         const user = await User.findOne({
