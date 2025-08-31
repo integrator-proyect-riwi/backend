@@ -1,4 +1,6 @@
--- limpiar todas las tablas y reiniciar IDs
+-- =========================
+-- LIMPIEZA DE TABLAS
+-- =========================
 TRUNCATE TABLE certificate_requests,
 requests,
 user_role,
@@ -17,142 +19,177 @@ status_types,
 genders,
 role RESTART IDENTITY CASCADE;
 
--- insertar roles
-INSERT INTO role (name, codename)
+-- =========================
+-- ROLES
+-- =========================
+INSERT INTO role (name, codename, created_at, updated_at)
 VALUES
-    ('administrator', 'admin'),
-    ('employee', 'employee');
+    ('Administrator', 'admin', NOW(), NOW()),
+    ('Employee', 'employee', NOW(), NOW());
 
--- insertar géneros
-INSERT INTO genders (name, codename)
+-- =========================
+-- GÉNEROS
+-- =========================
+INSERT INTO genders (name, codename, created_at, updated_at)
 VALUES
-    ('male', 'male'),
-    ('female', 'female'),
-    ('other', 'other');
+    ('Male', 'male', NOW(), NOW()),
+    ('Female', 'female', NOW(), NOW()),
+    ('Other', 'other', NOW(), NOW());
 
--- insertar tipos de estado
-INSERT INTO status_types (name, codename)
+-- =========================
+-- TIPOS DE ESTADO
+-- =========================
+INSERT INTO status_types (name, codename, created_at, updated_at)
 VALUES
-    ('employee_status', 'employee_status'),
-    ('contract_status', 'contract_status'),
-    ('request_status', 'request_status');
+    ('Employee Status', 'employee_status', NOW(), NOW()),
+    ('Contract Status', 'contract_status', NOW(), NOW()),
+    ('Request Status', 'request_status', NOW(), NOW());
 
--- insertar estados
-INSERT INTO status (name, codename, status_type_id)
+-- =========================
+-- ESTADOS
+-- =========================
+INSERT INTO status (name, codename, status_type_id, created_at, updated_at)
 VALUES
-    ('active', 'active', 1),
-    ('inactive', 'inactive', 1),
-    ('pending', 'pending', 3),
-    ('approved', 'approved', 3),
-    ('rejected', 'rejected', 3),
-    ('current', 'current', 2),
-    ('finalized', 'finalized', 2);
+    ('Active', 'active', 1, NOW(), NOW()),
+    ('Inactive', 'inactive', 1, NOW(), NOW()),
+    ('Pending', 'pending', 3, NOW(), NOW()),
+    ('Approved', 'approved', 3, NOW(), NOW()),
+    ('Rejected', 'rejected', 3, NOW(), NOW()),
+    ('Current', 'current', 2, NOW(), NOW()),
+    ('Finalized', 'finalized', 2, NOW(), NOW());
 
--- insertar ocupaciones
-INSERT INTO occupations (name, codename)
+-- =========================
+-- OCUPACIONES
+-- =========================
+INSERT INTO occupations (name, codename, created_at, updated_at)
 VALUES
-    ('software_engineer', 'software_engineer'),
-    ('data_analyst', 'data_analyst'),
-    ('ux_ui_designer', 'ux_ui_designer'),
-    ('project_manager', 'project_manager');
+    ('Software Engineer', 'software_engineer', NOW(), NOW()),
+    ('Data Analyst', 'data_analyst', NOW(), NOW()),
+    ('UX/UI Designer', 'ux_ui_designer', NOW(), NOW()),
+    ('Project Manager', 'project_manager', NOW(), NOW());
 
--- table: users
-INSERT INTO
-    users (username, password, email)
+-- =========================
+-- USUARIOS
+-- =========================
+INSERT INTO users (username, password, email, created_at, updated_at)
 VALUES
-    ('admin', '$2b$10$W6QRfupqvreMFgNyjP2ya.qIPf9maz2svCclkuZIKbIWLwj4wYV/a', 'admin@enterprise.com'), -- password: admin123
-    ('employee', '$2b$10$n1CU49p7HVNPKB4tF13oOOwQa/IieFY1SxpEyRWiwQrGh69Cw9cTO', 'employee@enterprise.com'), -- password: empleado123
-    ('jdoe', '$2b$10$Epgc5WFtDA5IjzuNdCbO2umKqxxm9KX.2w6uJ4GZZDJ/KX/y35pHC', 'jdoe@example.com'), -- password: pass123
-    ('asmith', '$2b$10$Set.I/6tFki3KORLz2TCmeR65protBkQ7wfCz7RNetbDjsz5fQr5G', 'asmith@example.com'), -- password: pass456
-    ('mmartinez', '$2b$10$cIVw6XLVEbMu50.UTLOQDuNlouO8YkwEDZ8wmjK7mFqM2jOj9on/G', 'mmartinez@example.com'), -- password: pass789
-    ('lgarcia', '$2b$10$uiDLeXdTqxiN/uVeriYwxOWzc2upGRSfb0nl2PgPMJu2K9iQnUj/O', 'lgarcia@example.com'); -- password: pass000
+    ('admin', '$2b$10$W6QRfupqvreMFgNyjP2ya.qIPf9maz2svCclkuZIKbIWLwj4wYV/a', 'admin@enterprise.com', NOW(), NOW()), -- admin123
+    ('employee', '$2b$10$n1CU49p7HVNPKB4tF13oOOwQa/IieFY1SxpEyRWiwQrGh69Cw9cTO', 'employee@enterprise.com', NOW(), NOW()), -- empleado123
+    ('jdoe', '$2b$10$Epgc5WFtDA5IjzuNdCbO2umKqxxm9KX.2w6uJ4GZZDJ/KX/y35pHC', 'jdoe@example.com', NOW(), NOW()), -- pass123
+    ('asmith', '$2b$10$Set.I/6tFki3KORLz2TCmeR65protBkQ7wfCz7RNetbDjsz5fQr5G', 'asmith@example.com', NOW(), NOW()), -- pass456
+    ('mmartinez', '$2b$10$cIVw6XLVEbMu50.UTLOQDuNlouO8YkwEDZ8wmjK7mFqM2jOj9on/G', 'mmartinez@example.com', NOW(), NOW()), -- pass789
+    ('lgarcia', '$2b$10$uiDLeXdTqxiN/uVeriYwxOWzc2upGRSfb0nl2PgPMJu2K9iQnUj/O', 'lgarcia@example.com', NOW(), NOW()); -- pass000
 
--- insertar prioridades
-INSERT INTO priorities (name, codename)
+-- =========================
+-- PRIORIDADES
+-- =========================
+INSERT INTO priorities (name, codename, created_at, updated_at)
 VALUES
-    ('normal', 'normal'),
-    ('urgent', 'urgent');
+    ('Normal', 'normal', NOW(), NOW()),
+    ('Urgent', 'urgent', NOW(), NOW());
 
--- insertar tipos de solicitud
-INSERT INTO request_types (name, codename)
+-- =========================
+-- TIPOS DE SOLICITUD
+-- =========================
+INSERT INTO request_types (name, codename, created_at, updated_at)
 VALUES
-    ('vacations', 'vacations'),
-    ('medical_permit', 'medical_permit'),
-    ('p_m_leave', 'p/m_leave'),
-    ('schedule_change', 'schedule_change'),
-    ('personal_permit', 'personal_permit'),
-    ('training_leave', 'training_leave'),
-    ('compensatory_day', 'compensatory_day');
+    ('Vacations', 'vacations', NOW(), NOW()),
+    ('Medical Permit', 'medical_permit', NOW(), NOW()),
+    ('Parental Leave', 'p_m_leave', NOW(), NOW()),
+    ('Schedule Change', 'schedule_change', NOW(), NOW()),
+    ('Personal Permit', 'personal_permit', NOW(), NOW()),
+    ('Training Leave', 'training_leave', NOW(), NOW()),
+    ('Compensatory Day', 'compensatory_day', NOW(), NOW());
 
--- insertar tipos de certificado
-INSERT INTO certificate_types (name, codename)
+-- =========================
+-- TIPOS DE CERTIFICADO
+-- =========================
+INSERT INTO certificate_types (name, codename, created_at, updated_at)
 VALUES
-    ('employment_certificate', 'employment_certificate'),
-    ('income_certificate', 'income_certificate');
+    ('Employment Certificate', 'employment_certificate', NOW(), NOW()),
+    ('Income Certificate', 'income_certificate', NOW(), NOW());
 
--- insertar soportes
-INSERT INTO supports (documents, description, observation)
+-- =========================
+-- SOPORTES
+-- =========================
+INSERT INTO supports (documents, description, observation, created_at, updated_at)
 VALUES
-    (E'\\x', 'i need a certificate for the bank.', 'no observations'),
-    (E'\\x', 'i request permission for personal reasons.', 'urgent');
+    (E'\\x', 'I need a certificate for the bank.', 'No observations', NOW(), NOW()),
+    (E'\\x', 'I request permission for personal reasons.', 'Urgent', NOW(), NOW());
 
--- insertar tipos de contrato
-INSERT INTO contract_types (name, codename)
+-- =========================
+-- TIPOS DE CONTRATO
+-- =========================
+INSERT INTO contract_types (name, codename, created_at, updated_at)
 VALUES
-    ('full_time', 'full_time'),
-    ('half_time', 'half_time'),
-    ('part_time', 'part_time');
+    ('Full-time', 'full_time', NOW(), NOW()),
+    ('Half-time', 'half_time', NOW(), NOW()),
+    ('Part-time', 'part_time', NOW(), NOW());
 
--- insertar departamentos
-INSERT INTO departments (name, codename, leader_id)
+-- =========================
+-- DEPARTAMENTOS
+-- =========================
+INSERT INTO departments (name, codename, leader_id, created_at, updated_at)
 VALUES
-    ('engineering_department', 'engineering_dept', NULL),
-    ('hr_department', 'hr_dept', NULL),
-    ('marketing_department', 'marketing_dept', NULL);
+    ('Engineering Department', 'engineering_dept', NULL, NOW(), NOW()),
+    ('HR Department', 'hr_dept', NULL, NOW(), NOW()),
+    ('Marketing Department', 'marketing_dept', NULL, NOW(), NOW());
 
--- insertar contratos
-INSERT INTO contracts (start_date, end_date, retire_date, status_id, contract_type_id, department_id, occupation_id, responsibilities, salary)
+-- =========================
+-- CONTRATOS
+-- =========================
+INSERT INTO contracts (start_date, end_date, retire_date, status_id, contract_type_id, department_id, occupation_id, responsibilities, salary, created_at, updated_at)
 VALUES
-    ('2023-01-15', NULL, NULL, 6, 1, 1, 1, 'software development', 50000.00),
-    ('2023-03-20', NULL, NULL, 6, 1, 2, 2, 'personnel data analysis', 45000.00),
-    ('2023-05-10', NULL, NULL, 6, 2, 3, 3, 'campaign design', 35000.00);
+    ('2023-01-15', NULL, NULL, 6, 1, 1, 1, 'Software development', 50000.00, NOW(), NOW()),
+    ('2023-03-20', NULL, NULL, 6, 1, 2, 2, 'Personnel data analysis', 45000.00, NOW(), NOW()),
+    ('2023-05-10', NULL, NULL, 6, 2, 3, 3, 'Campaign design', 35000.00, NOW(), NOW());
 
--- insertar empleados
-INSERT INTO employees (name, lastname, birthday, identification, gender_id, user_id, contract_id, status_id)
+-- =========================
+-- EMPLEADOS
+-- =========================
+INSERT INTO employees (name, lastname, birthday, identification, gender_id, user_id, contract_id, status_id, created_at, updated_at)
 VALUES
-    ('john', 'doe', '1990-05-25', '123456789', 1, 1, 1, 1),
-    ('anne', 'smith', '1985-11-12', '987654321', 2, 2, 2, 1),
-    ('maria', 'martinez', '1992-02-28', '112233445', 2, 3, 3, 1),
-    ('luis', 'garcia', '1995-07-01', '556677889', 1, 4, 1, 1),
-    ('employee', 'employee', '1980-01-01', '222222222', 3, 6, 1, 1);
+    ('John', 'Doe', '1990-05-25', '123456789', 1, 1, 1, 1, NOW(), NOW()),
+    ('Anne', 'Smith', '1985-11-12', '987654321', 2, 2, 2, 1, NOW(), NOW()),
+    ('Maria', 'Martinez', '1992-02-28', '112233445', 2, 3, 3, 1, NOW(), NOW()),
+    ('Luis', 'Garcia', '1995-07-01', '556677889', 1, 4, 1, 1, NOW(), NOW()),
+    ('Employee', 'Employee', '1980-01-01', '222222222', 3, 6, 1, 1, NOW(), NOW());
 
--- actualizar líderes de departamento
+-- =========================
+-- ACTUALIZAR LÍDERES DE DEPARTAMENTO
+-- =========================
 UPDATE departments SET leader_id = 1 WHERE id = 1;
 UPDATE departments SET leader_id = 2 WHERE id = 2;
 UPDATE departments SET leader_id = 3 WHERE id = 3;
 
--- insertar roles de usuario
-INSERT INTO user_role (user_id, role_id)
+-- =========================
+-- ROLES DE USUARIO
+-- =========================
+INSERT INTO user_role (user_id, role_id, created_at, updated_at)
 VALUES
-    (1, 1),
-    (2, 2),
-    (3, 2),
-    (4, 2),
-    (5, 2),
-    (6, 2);
+    (1, 1, NOW(), NOW()),
+    (2, 2, NOW(), NOW()),
+    (3, 2, NOW(), NOW()),
+    (4, 2, NOW(), NOW()),
+    (5, 2, NOW(), NOW()),
+    (6, 2, NOW(), NOW());
 
--- insertar solicitudes
-INSERT INTO requests (code, employee_id, request_type_id, support_id, status_id, priority_id, leader_id, start_date, end_date)
+-- =========================
+-- SOLICITUDES
+-- =========================
+INSERT INTO requests (code, employee_id, request_type_id, support_id, status_id, priority_id, leader_id, start_date, end_date, created_at, updated_at)
 VALUES
-    ('sol-001', 2, 3, 2, 3, 2, 2, '2025-10-15', '2025-10-26'),
-    ('sol-002', 3, 3, 1, 3, 1, 1, '2025-09-15', '2025-09-25'),
-    ('sol-003', 1, 1, 1, 4, 2, 2, '2025-08-01', '2025-08-01'),
-    ('sol-004', 4, 2, 2, 3, 1, 3, '2025-09-10', '2025-09-15'),
-    ('sol-005', 2, 3, 2, 5, 1, 1, '2025-10-01', '2025-10-10'),
-    ('sol-006', 1, 1, 1, 4, 1, 2, '2025-07-15', '2025-07-15');
+    ('sol-001', 2, 3, 2, 3, 2, 2, '2025-10-15', '2025-10-26', NOW(), NOW()),
+    ('sol-002', 3, 3, 1, 3, 1, 1, '2025-09-15', '2025-09-25', NOW(), NOW()),
+    ('sol-003', 1, 1, 1, 4, 2, 2, '2025-08-01', '2025-08-01', NOW(), NOW()),
+    ('sol-004', 4, 2, 2, 3, 1, 3, '2025-09-10', '2025-09-15', NOW(), NOW()),
+    ('sol-005', 2, 3, 2, 5, 1, 1, '2025-10-01', '2025-10-10', NOW(), NOW()),
+    ('sol-006', 1, 1, 1, 4, 1, 2, '2025-07-15', '2025-07-15', NOW(), NOW());
 
--- insertar solicitudes de certificados
-INSERT INTO certificate_requests (request_id, certificate_type_id)
+-- =========================
+-- SOLICITUDES DE CERTIFICADOS
+-- =========================
+INSERT INTO certificate_requests (request_id, certificate_type_id, created_at, updated_at)
 VALUES
-    (3, 1),
-    (6, 2);
+    (3, 1, NOW(), NOW()),
+    (6, 2, NOW(), NOW());
