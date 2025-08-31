@@ -15,7 +15,7 @@ export async function createUser(req, res) {
 export async function getUsers(req, res) {
   try {
     const users = await User.findAll({
-      attributes: ['username', 'passwd', 'email'],
+      attributes: ['username', 'password', 'email'],
       include: [{
         model: Role,
         as: 'roles',
@@ -28,7 +28,7 @@ export async function getUsers(req, res) {
 
     const simplifiedUsers = users.map(user => ({
       username: user.username,
-      passwd: user.passwd,
+      password: user.password,
       email: user.email,
       roles: user.roles.map(r => r.name).join(', ')   // ["Empleado", "Admin"]
     }));
