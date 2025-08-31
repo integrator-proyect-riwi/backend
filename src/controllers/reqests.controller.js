@@ -1,4 +1,4 @@
-import { fn, col, literal, where } from 'sequelize';
+import { fn, col, literal } from 'sequelize';
 import { generateRequestCode, getUserFromToken, findLeader, createSupport } from '../utils/index.js';
 import { Request, Status, Employee, RequestType, Priority, Department, Contract, StatusType } from '../models/index.js';
 
@@ -252,7 +252,7 @@ export async function getRequests(req, res) {
             raw: true
         });
 
-        res.status(201).json({ requests });
+        res.status(201).json(requests);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error.' });
@@ -277,9 +277,9 @@ export async function updateStatusRequest(req, res) {
         const request = await Request.findOne({ where: { code } });
         if (!request) return res.status(404).json({ error: 'Request not found' });
 
-        const updatedRequest = await Request.update({ status_id: status.id }, { where: { code }, returning: true });
+        const updatedRequest = await Request.update({ status_id: status.id }, { where: { code } });
 
-        res.status(201).json({ message: 'Status updated successfully.', request: updatedRequest });
+        res.status(201).json({ message: 'Status updated successfully.'});
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error.' });

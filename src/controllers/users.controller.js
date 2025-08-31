@@ -15,22 +15,22 @@ export async function createUser(req, res) {
 export async function getUsers(req, res) {
   try {
     const users = await User.findAll({
-      attributes: ['username', 'passwd', 'email'],
+      attributes: ['username', 'password', 'email'],
       include: [{
         model: Role,
         as: 'roles',
         attributes: ['name'],
         through: { attributes: [] }
       }],
-      where: {is_active: true},
-      order: [['id','DESC']]
+      where: { is_active: true },
+      order: [['id', 'DESC']]
     });
+    if (!users) return res.status(404).json({ message: 'Not users to show' });
 
     const simplifiedUsers = users.map(user => ({
       username: user.username,
-      passwd: user.passwd,
       email: user.email,
-      roles: user.roles.map(r => r.name).join(', ')   // ["Empleado", "Admin"]
+      role: user.roles.map(r => r.name).join(', ')
     }));
 
     res.json(simplifiedUsers);
@@ -54,10 +54,15 @@ export async function getUserById(req, res) {
         id: id
       }
     });
-    if (!user) {
-      res.status(404).json({ message: 'User not found' });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const simplifiedUser = {
+      username: user.username,
+      email: user.email,
+      role: user.roles.map(r => r.name).join(', ')
     };
-    res.status(201).json(user);
+
+    res.status(201).json(simplifiedUser);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

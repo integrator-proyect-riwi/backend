@@ -5,17 +5,17 @@ import Role from '../models/role.js';
 
 //users registration logic
 export async function register(req, res) {
-    const { username, passwd, email, role } = req.body;
+    const { username, password, email, role } = req.body;
 
-    if (!username || !passwd || !email) return res.status(400).json({ error: 'all fields are required.' });
+    if (!username || !password || !email) return res.status(400).json({ error: 'all fields are required.' });
     try {
         const saltRount = 10;
-        const hashedPasswd = await bcrypt.hash(passwd, saltRount);
+        const hashedPassword = await bcrypt.hash(password, saltRount);
 
         const newUser = await User.create({
             username,
             email,
-            passwd: hashedPasswd,
+            password: hashedPassword,
         });
 
         const roleCodename = role && role.toLowerCase() === 'admin' ? 'admin' : 'employee';
@@ -32,10 +32,8 @@ export async function register(req, res) {
 
         res.status(201).json({
             message: 'User successfully registered.',
-            user: {
-                username: newUser.username,
-                email: newUser.email,
-            },
+            username: newUser.username,
+            email: newUser.email,
         });
     } catch (error) {
         if (error === 'SequelizeUniqueConstraintError') return res.status(400).json({ error: 'The email or username already exists.' });
@@ -46,9 +44,9 @@ export async function register(req, res) {
 
 //users login logic
 export async function login(req, res) {
-    const { email, passwd } = req.body;
+    const { email, password } = req.body;
 
-    if (!email || !passwd) return res.status(400).json({ error: 'Email and password are required' });
+    if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
     try {
         const user = await User.findOne({
             include: [{
@@ -57,12 +55,12 @@ export async function login(req, res) {
                 attributes: ['codename'],
                 through: { attributes: [] },
             }],
-            where: { email, is_active: true}
+            where: { email, is_active: true }
         });
         if (!user) return res.status(401).json({ error: 'Invalid credentials.' });
 
-        const passwdMatch = await bcrypt.compare(passwd, user.passwd);
-        if (!passwdMatch) return res.status(401).json({ error: 'Invalid credentials.' });
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) return res.status(401).json({ error: 'Invalid credentials.' });
 
         const role = user.roles.length === 1 ? user.roles[0].codename : user.roles.map(r => r.codename);
 
@@ -76,10 +74,10 @@ export async function login(req, res) {
         res.status(200).json({
             message: "Login successful.",
             token,
-            user: {
-                username: user.username,
-                email: user.email,
-            }
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: role
         });
     } catch (error) {
         console.error(error);

@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { Support, Department, Request, Employee } from '../models/index.js'
+import { Support, Department, Request, Employee, Contract, Status, Priority, RequestType } from '../models/index.js'
+import { fn, col, literal } from 'sequelize';
 
 export function getUserFromToken(authHeader) {
     if (!authHeader) return null;
@@ -35,7 +36,7 @@ export async function generateRequestCode(transaction) {
     const lastNumber = lastRequest?.getDataValue('max_code') || 0;
     const newNumber = (lastNumber + 1).toString().padStart(3, '0');
 
-    return `SOL-${newNumber}`;
+    return `sol-${newNumber}`;
 }
 
 export async function findLeader(leaderString) {
