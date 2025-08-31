@@ -51,13 +51,13 @@ export async function login(req, res) {
     if (!email || !passwd) return res.status(400).json({ error: 'Email and password are required' });
     try {
         const user = await User.findOne({
-            where: { email },
             include: [{
                 model: Role,
                 as: 'roles',
                 attributes: ['codename'],
-                through: { attributes: [] }
-            }]
+                through: { attributes: [] },
+            }],
+            where: { email, is_active: true}
         });
         if (!user) return res.status(401).json({ error: 'Invalid credentials.' });
 

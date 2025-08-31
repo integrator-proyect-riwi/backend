@@ -4,10 +4,10 @@ import { baseFields } from './baseModel.js';
 
 const CertificateRequest = sequelize.define('certificate_request', {
     request_id: {
-        type: DataTypes.INTEGER,   // ✅ CORRECTO
+        type: DataTypes.INTEGER, 
         allowNull: false,
         references: {
-            model: 'requests',       // nombre de la tabla padre
+            model: 'requests',       
             key: 'id',
         },
     },
