@@ -1,10 +1,6 @@
-import { fn, col } from 'sequelize';
+import { fn, col, literal } from 'sequelize';
 import { generateRequestCode, getUserFromToken, findLeader, createSupport } from '../utils/index.js';
-import Request from '../models/request.js';
-import Status from '../models/status.js';
-import Employee from '../models/employee.js';
-import RequestType from '../models/requestsType.js';
-import Priority from '../models/priority.js';
+import { Request, Status, Employee, RequestType, Priority, Department, Contract } from '../models/index.js';
 
 export async function totalRequests(req, res) {
     try {
@@ -65,7 +61,7 @@ export async function lastRequests(req, res) {
                 { model: RequestType, as: 'request_type', attributes: [] },
                 { model: Priority, as: 'priority', attributes: [] }
             ],
-            order: [['created_at', 'DESC']],
+            order: [['code', 'DESC']],
             limit: 4,
             raw: true
         });
@@ -163,6 +159,72 @@ export async function createRequest(req, res) {
 
     } catch (error) {
         if (!t.finished) await t.rollback();
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+}
+
+export async function getRequests(req, res) {
+    try {
+        const requests = await Request.findAll({
+            attributes: [
+                'code',
+                [col('request_type.name'), 'request_type'],
+                [fn('CONCAT', col('employee.name'), ' ', col('employee.lastname')), 'employee'],
+                [col('employee.contract.department.name'), 'department'],
+                [fn('TO_CHAR', col('request.created_at'), 'yyyy-MM-dd'), 'request_date'],
+                [
+                    literal(`
+                        CASE
+                        WHEN "request"."start_date" IS NOT NULL AND "request"."end_date" IS NOT NULL
+                            THEN TO_CHAR("request"."start_date", 'yyyy-MM-dd') || ' - ' || TO_CHAR("request"."end_date", 'yyyy-MM-dd')
+                        WHEN "request"."start_date" IS NOT NULL
+                            THEN TO_CHAR("request"."start_date", 'yyyy-MM-dd') || ' - (sin fecha fin)'
+                        WHEN "request"."end_date" IS NOT NULL
+                            THEN '(sin fecha inicio) - ' || TO_CHAR("request"."end_date", 'yyyy-MM-dd')
+                        ELSE 'Sin período'
+                        END
+                    `),
+                    'period'
+                ],
+                [col('status.name'), 'status'],
+                [col('priority.name'), 'priority'],
+                [fn('CONCAT', col('employee.contract.department.leader.name'), ' ', col('employee.contract.department.leader.lastname')), 'leader']
+            ],
+            include: [
+                { model: RequestType, as: 'request_type', attributes: [] },
+                {
+                    model: Employee,
+                    as: 'employee',
+                    attributes: [],
+                    include: [
+                        {
+                            model: Contract,
+                            as: 'contract',
+                            attributes: [],
+                            include: [
+                                {
+                                    model: Department,
+                                    as: 'department',
+                                    attributes: [],
+                                    include: [
+                                        { model: Employee, as: 'leader', attributes: [] }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                { model: Status, as: 'status', attributes: [] },
+                { model: Priority, as: 'priority', attributes: [] }
+            ],
+            where: { is_active: true },
+            order: [['code', 'DESC']],
+            raw: true
+        });
+
+        res.status(201).json({requests});
+    } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error.' });
     }

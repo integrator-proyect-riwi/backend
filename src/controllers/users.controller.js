@@ -21,7 +21,9 @@ export async function getUsers(req, res) {
         as: 'roles',
         attributes: ['name'],
         through: { attributes: [] }
-      }]
+      }],
+      where: {is_active: true},
+      order: [['id','DESC']]
     });
     res.json(users);
   } catch (error) {
