@@ -19,16 +19,16 @@ export async function getTypeRequest(req, res) {
 
 export async function totalRequests(req, res) {
     try {
-        const totalRequests = await Request.count({where: {is_active: true}});
+        const totalRequests = await Request.count({ where: { is_active: true } });
 
-    if (totalRequests === 0) {
-        return res.status(200).json({ message: 'Not requests to show' })
+        if (totalRequests === 0) {
+            return res.status(200).json({ message: 'Not requests to show' })
+        }
+
+        res.status(200).json(...totalRequests);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
-
-    res.status(200).json(...totalRequests);
-} catch (error) {
-    res.status(500).json({ error: error.message });
-}
 }
 
 export async function requestsByStatus(req, res) {
@@ -302,61 +302,6 @@ export async function updateStatusRequest(req, res) {
     }
 }
 
-// get all requests with employee name, department, request date, period, status, priority, and leader
-export const getAllRequests = async (req, res) => {
-    try {
-        const requests = await Request.findAll({
-            where: { is_active: true }, 
-            include: [
-                {
-                    model: Employee,
-                    as: 'employee',
-                    attributes: ['name', 'lastname'],
-                    include: [
-                        {
-                            model: Contract,
-                            as: 'contract',
-                            include: [
-                                {
-                                    model: Department,
-                                    as: 'department',
-                                    attributes: ['name']
-                                }
-                            ]
-                        }
-                    ]
-                },
-                { model: Status, as: 'status', attributes: ['name'] },
-                { model: Priority, as: 'priority', attributes: ['name'] },
-                {
-                    model: Employee,
-                    as: 'leader',
-                    attributes: ['name', 'lastname']
-                }
-            ],
-            attributes: ['created_at', 'code', 'start_date', 'end_date']
-        });
-
-        const result = requests.map((req) => ({
-            code: req.code, // o formatear "SOL-001"
-            type: "Vacaciones", // si viene de otra tabla cámbialo aquí
-            employee: `${req.employee.name} ${req.employee.lastname}`,
-            department: req.employee.contract?.department?.name || null,
-            requestDate: req.created_at.toISOString().split('T')[0], // 👈 Fecha solicitud
-            period: `${req.start_date} - ${req.end_date}`,
-            status: req.status?.name,
-            priority: req.priority?.name,
-            leader: req.leader ? `${req.leader.name} ${req.leader.lastname}` : null
-        }));
-
-        res.json(result);
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Error fetching requests" });
-    }
-};
-
 // get single request by id with employee name, department, request date, period, status, priority, and leader
 export const getRequestById = async (req, res) => {
     try {
@@ -376,7 +321,14 @@ export const getRequestById = async (req, res) => {
                                 {
                                     model: Department,
                                     as: 'department',
-                                    attributes: ['name']
+                                    attributes: ['name'],
+                                    include: [
+                                        {
+                                            model: Employee,
+                                            as: 'leader',
+                                            attributes: ['name', 'lastname']
+                                        }
+                                    ]
                                 }
                             ]
                         }
@@ -384,11 +336,6 @@ export const getRequestById = async (req, res) => {
                 },
                 { model: Status, as: 'status', attributes: ['name'] },
                 { model: Priority, as: 'priority', attributes: ['name'] },
-                {
-                    model: Employee,
-                    as: 'leader',
-                    attributes: ['name', 'lastname']
-                }
             ],
             attributes: ['created_at', 'code', 'start_date', 'end_date']
         });
@@ -406,7 +353,7 @@ export const getRequestById = async (req, res) => {
             period: `${request.start_date} - ${request.end_date}`,
             status: request.status?.name,
             priority: request.priority?.name,
-            leader: request.leader ? `${request.leader.name} ${request.leader.lastname}` : null
+            leader: request.employee.contract?.department?.leader ? `${request.employee.contract.department.leader.name} ${request.employee.contract.department.leader.lastname}` : null
         };
 
         res.json(result);

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createRequest, getRequests, lastRequests, requestsByStatus, totalRequests, requestsByType, getTypeRequest, updateStatusRequest, deleteRequest, getAllRequests, getRequestById} from '../controllers/requests.controller.js';
+import { createRequest, getRequests, lastRequests, requestsByStatus, totalRequests, requestsByType, getTypeRequest, updateStatusRequest, deleteRequest, getRequestById} from '../controllers/requests.controller.js';
 
 const router = Router();
 
@@ -11,7 +11,6 @@ router.get('/type', requestsByType)
 router.post('/', createRequest);
 router.get('/types', getTypeRequest);
 router.patch('/:code/status', updateStatusRequest);
-router.get('/employees-info', getAllRequests);
 router.get('/employees/:id', getRequestById);
 router.delete('/:code', deleteRequest);
 
