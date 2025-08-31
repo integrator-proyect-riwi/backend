@@ -51,7 +51,8 @@ export async function getUserById(req, res) {
         through: { attributes: [] }
       }],
       where: {
-        id: id
+        id: id,
+        is_active: true
       }
     });
     if (!user) return res.status(404).json({ message: 'User not found' });

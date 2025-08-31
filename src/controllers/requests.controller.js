@@ -19,21 +19,22 @@ export async function getTypeRequest(req, res) {
 
 export async function totalRequests(req, res) {
     try {
-        const totalRequests = await Request.count();
+        const totalRequests = await Request.count({where: {is_active: true}});
 
-        if (totalRequests === 0) {
-            return res.status(200).json({ message: 'Not requests to show' })
-        }
-
-        res.status(200).json(...totalRequests);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    if (totalRequests === 0) {
+        return res.status(200).json({ message: 'Not requests to show' })
     }
+
+    res.status(200).json(...totalRequests);
+} catch (error) {
+    res.status(500).json({ error: error.message });
+}
 }
 
 export async function requestsByStatus(req, res) {
     try {
         const requests = await Request.findAll({
+            where: { is_active: true },
             attributes: [
                 [fn('COUNT', col('request.id')), 'total']
             ],
@@ -61,6 +62,7 @@ export async function requestsByStatus(req, res) {
 export async function lastRequests(req, res) {
     try {
         const requests = await Request.findAll({
+            where: { is_active: true },
             attributes: [
                 [fn('CONCAT', col('employee.name'), ' ', col('employee.lastname')), 'employee'],
                 [col('request_type.name'), 'request_type'],
@@ -93,6 +95,7 @@ export async function lastRequests(req, res) {
 export async function requestsByType(req, res) {
     try {
         const requests = await Request.findAll({
+            where: { is_active: ture },
             attributes: [
                 [fn('COUNT', col('request.id')), 'total']
             ],
@@ -128,7 +131,7 @@ export async function createRequest(req, res) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
 
-        const employee = await Employee.findOne({ where: { user_id: user.id } });
+        const employee = await Employee.findOne({ where: { user_id: user.id, is_active: true } });
         if (!employee) {
             return res.status(404).json({ error: 'Employee not found for this user' });
         }
@@ -287,14 +290,14 @@ export async function updateStatusRequest(req, res) {
         });
         if (!status) return res.status(400).json({ error: `Status "${codename}" not valid for requests` });
 
-        const request = await Request.findOne({ where: { code } });
+        const request = await Request.findOne({ where: { code, is_active: true } });
         if (!request) return res.status(404).json({ error: 'Request not found' });
 
         const updatedRequest = await Request.update({ status_id: status.id }, { where: { code } });
 
         res.status(201).json({ message: 'Status updated successfully.' });
     } catch (error) {
-        console.error(error);
+        console.error("Error updating status:", error);
         res.status(500).json({ error: 'Internal server error.' });
     }
 }
@@ -413,3 +416,21 @@ export const getRequestById = async (req, res) => {
         res.status(500).json({ error: "Error fetching request" });
     }
 };
+
+export async function deleteRequest(req, res) {
+    try {
+        const { code } = req.params;
+        if (!code) return res.status(400).json({ error: "Request code is required" });
+
+        const request = await Request.findOne({ where: { code, is_active: true } });
+        if (!request) return res.status(404).json({ message: `Request ${code} not found or already deleted` });
+
+        await Request.update({ is_active: false }, { where: { code } });
+
+        res.status(200).json({ message: "Request deleted successfully" });
+
+    } catch (error) {
+        console.error("Error deleting request:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
