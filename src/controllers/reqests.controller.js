@@ -77,6 +77,36 @@ export async function lastRequests(req, res) {
     }
 }
 
+export async function requestsByType(req, res) {
+    try {
+        const requests = await Request.findAll({
+            attributes: [
+                [fn('COUNT', col('request.id')), 'total']
+            ],
+            include: [{
+                model: RequestType,
+                as: 'request_type',
+                attributes: ['name']
+            }],
+            group: ['request_type.id', 'request_type.name']
+        });
+
+        if (requests.length === 0) {
+            return res.status(200).json({ message: 'Not requests to show' });
+        }
+
+        const formatted = requests.reduce((acc, r) => {
+            acc[r.request_type.name] = parseInt(r.getDataValue('total'), 10);
+            return acc;
+        }, {});
+
+        res.status(200).json(formatted);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+
 export async function createRequest(req, res) {
     const t = await Request.sequelize.transaction();
 
