@@ -5,10 +5,7 @@ import { Request, Status, Employee, RequestType, Priority, Department, Contract 
 export async function getTypeRequest(req, res) {
     
     try {
-        const totalTypeRequests = await RequestType.findAll({
-            attributes: ["id", "name", "codename"],
-            where: { is_active: true }
-        });
+        const totalTypeRequests = await RequestType.findAll({where: { is_active: true }});
 
         if (totalTypeRequests === 0) {
             return res.status(200).json({ message: 'Not requests to show' })
@@ -28,7 +25,7 @@ export async function totalRequests(req, res) {
             return res.status(200).json({ message: 'Not requests to show' })
         }
 
-        res.status(200).json(totalRequests);
+        res.status(200).json(...totalRequests);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -269,7 +266,7 @@ export async function getRequests(req, res) {
             raw: true
         });
 
-        res.status(201).json({requests});
+        res.status(201).json(requests);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error.' });
