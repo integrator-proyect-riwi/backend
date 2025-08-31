@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createRequest, getRequests, lastRequests, requestsByStatus, totalRequests, requestsByType, getTypeRequest, updateStatusRequest, getAllRequests, getRequestById} from '../controllers/reqests.controller.js';
+import { createRequest, getRequests, lastRequests, requestsByStatus, totalRequests, requestsByType, getTypeRequest, updateStatusRequest, getAllRequests, getRequestById} from '../controllers/requests.controller.js';
 
 const router = Router();
 
