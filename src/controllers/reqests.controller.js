@@ -2,6 +2,21 @@ import { fn, col, literal } from 'sequelize';
 import { generateRequestCode, getUserFromToken, findLeader, createSupport } from '../utils/index.js';
 import { Request, Status, Employee, RequestType, Priority, Department, Contract, StatusType } from '../models/index.js';
 
+export async function getTypeRequest(req, res) {
+    
+    try {
+        const totalTypeRequests = await RequestType.findAll({where: { is_active: true }});
+
+        if (totalTypeRequests === 0) {
+            return res.status(200).json({ message: 'Not requests to show' })
+        }
+
+        res.status(200).json(totalTypeRequests);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
 export async function totalRequests(req, res) {
     try {
         const totalRequests = await Request.count();
@@ -10,9 +25,7 @@ export async function totalRequests(req, res) {
             return res.status(200).json({ message: 'Not requests to show' })
         }
 
-        res.status(200).json({
-            total_requests: totalRequests
-        });
+        res.status(200).json(...totalRequests);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

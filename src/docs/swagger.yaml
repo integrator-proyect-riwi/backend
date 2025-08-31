@@ -185,7 +185,7 @@ components:
         email:
           type: string
           example: juan@example.com
-        passwd:
+        password:
           type: string
           example: 123456
 
@@ -198,7 +198,7 @@ components:
         email:
           type: string
           example: juan@example.com
-        passwd:
+        password:
           type: string
           example: 123456
 
@@ -208,7 +208,7 @@ components:
         email:
           type: string
           example: juan@example.com
-        passwd:
+        password:
           type: string
           example: 123456
 
