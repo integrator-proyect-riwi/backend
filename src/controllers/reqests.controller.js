@@ -269,7 +269,7 @@ export async function updateStatusRequest(req, res) {
             include: [{
                 model: StatusType,
                 as: 'status_type',
-                where: { codename: 'request_status'}
+                where: { codename: 'request_status' }
             }]
         });
         if (!status) return res.status(400).json({ error: `Status "${codename}" not valid for requests` });
@@ -277,11 +277,7 @@ export async function updateStatusRequest(req, res) {
         const request = await Request.findOne({ where: { code } });
         if (!request) return res.status(404).json({ error: 'Request not found' });
 
-        console.log('antes de actualizar', request.updated_at);
-
         const updatedRequest = await Request.update({ status_id: status.id }, { where: { code }, returning: true });
-
-        console.log('antes de actualizar', updatedRequest.updated_at);
 
         res.status(201).json({ message: 'Status updated successfully.', request: updatedRequest });
     } catch (error) {
