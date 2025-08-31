@@ -298,3 +298,116 @@ export async function updateStatusRequest(req, res) {
         res.status(500).json({ error: 'Internal server error.' });
     }
 }
+
+// get all requests with employee name, department, request date, period, status, priority, and leader
+export const getAllRequests = async (req, res) => {
+  try {
+    const requests = await Request.findAll({
+      include: [
+        {
+          model: Employee,
+          as: 'employee',
+          attributes: ['name', 'lastname'],
+          include: [
+            {
+              model: Contract,
+              as: 'contract',
+              include: [
+                {
+                  model: Department,
+                  as: 'department',
+                  attributes: ['name']
+                }
+              ]
+            }
+          ]
+        },
+        { model: Status, as: 'status', attributes: ['name'] },
+        { model: Priority, as: 'priority', attributes: ['name'] },
+        { 
+          model: Employee, 
+          as: 'leader', 
+          attributes: ['name', 'lastname'] 
+        }
+      ],
+      attributes: ['created_at','code', 'start_date', 'end_date'] 
+    });
+
+    const result = requests.map((req) => ({
+      code: req.code, // o formatear "SOL-001"
+      type: "Vacaciones", // si viene de otra tabla cámbialo aquí
+      employee: `${req.employee.name} ${req.employee.lastname}`,
+      department: req.employee.contract?.department?.name || null,
+      requestDate: req.created_at.toISOString().split('T')[0], // 👈 Fecha solicitud
+      period: `${req.start_date} - ${req.end_date}`,
+      status: req.status?.name,
+      priority: req.priority?.name,
+      leader: req.leader ? `${req.leader.name} ${req.leader.lastname}` : null
+    }));
+
+    res.json(result);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error fetching requests" });
+  }
+};
+
+// get single request by id with employee name, department, request date, period, status, priority, and leader
+export const getRequestById = async (req, res) => {
+  try {
+    const { id } = req.params; // 👈 id de la URL
+    const request = await Request.findByPk(id, {
+      include: [
+        {
+          model: Employee,
+          as: 'employee',
+          attributes: ['name', 'lastname'],
+          include: [
+            {
+              model: Contract,
+              as: 'contract',
+              include: [
+                {
+                  model: Department,
+                  as: 'department',
+                  attributes: ['name']
+                }
+              ]
+            }
+          ]
+        },
+        { model: Status, as: 'status', attributes: ['name'] },
+        { model: Priority, as: 'priority', attributes: ['name'] },
+        { 
+          model: Employee, 
+          as: 'leader', 
+          attributes: ['name', 'lastname'] 
+        }
+      ],
+      attributes: ['created_at', 'code', 'start_date', 'end_date']
+    });
+
+    if (!request) {
+      return res.status(404).json({ error: "Request not found" });
+    }
+
+    const result = {
+      code: request.code,
+      type: "Vacaciones", // temporal fijo
+      employee: `${request.employee.name} ${request.employee.lastname}`,
+      department: request.employee.contract?.department?.name || null,
+      requestDate: request.created_at.toISOString().split('T')[0],
+      period: `${request.start_date} - ${request.end_date}`,
+      status: request.status?.name,
+      priority: request.priority?.name,
+      leader: request.leader ? `${request.leader.name} ${request.leader.lastname}` : null
+    };
+
+    res.json(result);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error fetching request" });
+  }
+};
