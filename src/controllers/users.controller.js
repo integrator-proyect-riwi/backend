@@ -15,7 +15,7 @@ export async function createUser(req, res) {
 export async function getUsers(req, res) {
   try {
     const users = await User.findAll({
-      attributes: ['username', 'passworord', 'email'],
+      attributes: ['username', 'password', 'email'],
       include: [{
         model: Role,
         as: 'roles',
