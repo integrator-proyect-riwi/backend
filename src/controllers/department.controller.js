@@ -4,11 +4,11 @@ import { Employee, Department } from '../models/index.js';
 export const getDepartmentsWithLeaders = async (req, res) => {
   try {
     const departments = await Department.findAll({
-      attributes: ["name"], // solo el nombre del departamento
+      attributes: ["name"],
       include: [
         {
           model: Employee,
-          as: "leader", // relación definida en Department
+          as: "leader",
           attributes: ["name", "lastname"]
         }
       ]

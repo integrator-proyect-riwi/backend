@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     dialect: 'postgres',
     port: process.env.DB_PORT,
-    logging: false, // desactiva logs de SQL en consola
+    logging: false,
   }
 );
 

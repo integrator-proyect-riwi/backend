@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { Support, Department, Request, Employee, Contract, Status, Priority, RequestType } from '../models/index.js'
-import { fn, col, literal } from 'sequelize';
+import { Support, Department, Request, Employee } from '../models/index.js'
 
 export function getUserFromToken(authHeader) {
     if (!authHeader) return null;

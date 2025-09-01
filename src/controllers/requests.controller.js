@@ -3,7 +3,6 @@ import { generateRequestCode, getUserFromToken, findLeader, createSupport } from
 import { Request, Status, Employee, RequestType, Priority, Department, Contract, StatusType } from '../models/index.js';
 
 export async function getTypeRequest(req, res) {
-
     try {
         const totalTypeRequests = await RequestType.findAll({ where: { is_active: true } });
 
@@ -211,64 +210,150 @@ export async function createRequest(req, res) {
 
 export async function getRequests(req, res) {
     try {
-        const requests = await Request.findAll({
-            attributes: [
-                'code',
-                [col('request_type.name'), 'request_type'],
-                [fn('CONCAT', col('employee.name'), ' ', col('employee.lastname')), 'employee'],
-                [col('employee.contract.department.name'), 'department'],
-                [fn('TO_CHAR', col('request.created_at'), 'yyyy-MM-dd'), 'request_date'],
-                [
-                    literal(`
-                        CASE
-                        WHEN "request"."start_date" IS NOT NULL AND "request"."end_date" IS NOT NULL
-                            THEN TO_CHAR("request"."start_date", 'yyyy-MM-dd') || ' - ' || TO_CHAR("request"."end_date", 'yyyy-MM-dd')
-                        WHEN "request"."start_date" IS NOT NULL
-                            THEN TO_CHAR("request"."start_date", 'yyyy-MM-dd') || ' - (sin fecha fin)'
-                        WHEN "request"."end_date" IS NOT NULL
-                            THEN '(sin fecha inicio) - ' || TO_CHAR("request"."end_date", 'yyyy-MM-dd')
-                        ELSE 'Sin período'
-                        END
-                    `),
-                    'period'
-                ],
-                [col('status.name'), 'status'],
-                [col('priority.name'), 'priority'],
-                [fn('CONCAT', col('employee.contract.department.leader.name'), ' ', col('employee.contract.department.leader.lastname')), 'leader']
-            ],
-            include: [
-                { model: RequestType, as: 'request_type', attributes: [] },
-                {
-                    model: Employee,
-                    as: 'employee',
-                    attributes: [],
+        const user = getUserFromToken(req.headers.authorization);
+        if (!user) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+    
+        const userRole = user.role
+        if (!userRole) return res.status(404).json({ error: 'Role has not provided' });
+
+        if (userRole === 'admin') {
+            try {
+                const requests = await Request.findAll({
+                    attributes: [
+                        'code',
+                        [col('request_type.name'), 'request_type'],
+                        [fn('CONCAT', col('employee.name'), ' ', col('employee.lastname')), 'employee'],
+                        [col('employee.contract.department.name'), 'department'],
+                        [fn('TO_CHAR', col('request.created_at'), 'yyyy-MM-dd'), 'request_date'],
+                        [
+                            literal(`
+                                CASE
+                                WHEN "request"."start_date" IS NOT NULL AND "request"."end_date" IS NOT NULL
+                                    THEN TO_CHAR("request"."start_date", 'yyyy-MM-dd') || ' - ' || TO_CHAR("request"."end_date", 'yyyy-MM-dd')
+                                WHEN "request"."start_date" IS NOT NULL
+                                    THEN TO_CHAR("request"."start_date", 'yyyy-MM-dd') || ' - (sin fecha fin)'
+                                WHEN "request"."end_date" IS NOT NULL
+                                    THEN '(sin fecha inicio) - ' || TO_CHAR("request"."end_date", 'yyyy-MM-dd')
+                                ELSE 'Sin período'
+                                END
+                            `),
+                            'period'
+                        ],
+                        [col('status.name'), 'status'],
+                        [col('priority.name'), 'priority'],
+                        [fn('CONCAT', col('employee.contract.department.leader.name'), ' ', col('employee.contract.department.leader.lastname')), 'leader']
+                    ],
                     include: [
+                        { model: RequestType, as: 'request_type', attributes: [] },
                         {
-                            model: Contract,
-                            as: 'contract',
+                            model: Employee,
+                            as: 'employee',
                             attributes: [],
                             include: [
                                 {
-                                    model: Department,
-                                    as: 'department',
+                                    model: Contract,
+                                    as: 'contract',
                                     attributes: [],
                                     include: [
-                                        { model: Employee, as: 'leader', attributes: [] }
+                                        {
+                                            model: Department,
+                                            as: 'department',
+                                            attributes: [],
+                                            include: [
+                                                { model: Employee, as: 'leader', attributes: [] }
+                                            ]
+                                        }
                                     ]
                                 }
                             ]
-                        }
-                    ]
-                },
-                { model: Status, as: 'status', attributes: [] },
-                { model: Priority, as: 'priority', attributes: [] }
-            ],
-            where: { is_active: true },
-            order: [['code', 'DESC']],
-            raw: true
-        });
+                        },
+                        { model: Status, as: 'status', attributes: [] },
+                        { model: Priority, as: 'priority', attributes: [] }
+                    ],
+                    where: { is_active: true },
+                    order: [['code', 'DESC']],
+                    raw: true
+                });
 
-        res.status(201).json(requests);
+                res.status(201).json(requests);
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ error: 'Internal server error.' });
+            }
+        }
+
+        if (userRole === 'employee') {
+            try {
+                const employee = await Employee.findOne({ where: { user_id: user.id, is_active: true } });
+                if (!employee) {
+                    return res.status(404).json({ error: 'Employee not found for this user' });
+                }
+                
+                const requests = await Request.findAll({
+                    attributes: [
+                        'code',
+                        [col('request_type.name'), 'request_type'],
+                        [fn('CONCAT', col('employee.name'), ' ', col('employee.lastname')), 'employee'],
+                        [col('employee.contract.department.name'), 'department'],
+                        [fn('TO_CHAR', col('request.created_at'), 'yyyy-MM-dd'), 'request_date'],
+                        [
+                            literal(`
+                                CASE
+                                WHEN "request"."start_date" IS NOT NULL AND "request"."end_date" IS NOT NULL
+                                    THEN TO_CHAR("request"."start_date", 'yyyy-MM-dd') || ' - ' || TO_CHAR("request"."end_date", 'yyyy-MM-dd')
+                                WHEN "request"."start_date" IS NOT NULL
+                                    THEN TO_CHAR("request"."start_date", 'yyyy-MM-dd') || ' - (sin fecha fin)'
+                                WHEN "request"."end_date" IS NOT NULL
+                                    THEN '(sin fecha inicio) - ' || TO_CHAR("request"."end_date", 'yyyy-MM-dd')
+                                ELSE 'Sin período'
+                                END
+                            `),
+                            'period'
+                        ],
+                        [col('status.name'), 'status'],
+                        [col('priority.name'), 'priority'],
+                        [fn('CONCAT', col('employee.contract.department.leader.name'), ' ', col('employee.contract.department.leader.lastname')), 'leader']
+                    ],
+                    include: [
+                        { model: RequestType, as: 'request_type', attributes: [] },
+                        {
+                            model: Employee,
+                            as: 'employee',
+                            attributes: [],
+                            include: [
+                                {
+                                    model: Contract,
+                                    as: 'contract',
+                                    attributes: [],
+                                    include: [
+                                        {
+                                            model: Department,
+                                            as: 'department',
+                                            attributes: [],
+                                            include: [
+                                                { model: Employee, as: 'leader', attributes: [] }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        { model: Status, as: 'status', attributes: [] },
+                        { model: Priority, as: 'priority', attributes: [] }
+                    ],
+                    where: { employee_id: employee.id, is_active: true },
+                    order: [['code', 'DESC']],
+                    raw: true
+                });
+
+                res.status(201).json(requests);
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ error: 'Internal server error.' });
+            }
+        }
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error.' });
@@ -293,7 +378,7 @@ export async function updateStatusRequest(req, res) {
         const request = await Request.findOne({ where: { code, is_active: true } });
         if (!request) return res.status(404).json({ error: 'Request not found' });
 
-        const updatedRequest = await Request.update({ status_id: status.id }, { where: { code } });
+        await Request.update({ status_id: status.id }, { where: { code } });
 
         res.status(201).json({ message: 'Status updated successfully.' });
     } catch (error) {
@@ -305,7 +390,7 @@ export async function updateStatusRequest(req, res) {
 // get single request by id with employee name, department, request date, period, status, priority, and leader
 export const getRequestById = async (req, res) => {
     try {
-        const { id } = req.params; // 👈 id de la URL
+        const { id } = req.params;
         const request = await Request.findByPk(id, {
             where: { is_active: true },
             include: [

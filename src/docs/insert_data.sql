@@ -149,11 +149,11 @@ VALUES
 -- =========================
 INSERT INTO employees (name, lastname, birthday, identification, gender_id, user_id, contract_id, status_id, created_at, updated_at)
 VALUES
-    ('John', 'Doe', '1990-05-25', '123456789', 1, 1, 1, 1, NOW(), NOW()),
-    ('Anne', 'Smith', '1985-11-12', '987654321', 2, 2, 2, 1, NOW(), NOW()),
-    ('Maria', 'Martinez', '1992-02-28', '112233445', 2, 3, 3, 1, NOW(), NOW()),
-    ('Luis', 'Garcia', '1995-07-01', '556677889', 1, 4, 1, 1, NOW(), NOW()),
-    ('Employee', 'Employee', '1980-01-01', '222222222', 3, 6, 1, 1, NOW(), NOW());
+    ('John', 'Doe', '1990-05-25', '123456789', 1, 3, 1, 1, NOW(), NOW()),
+    ('Anne', 'Smith', '1985-11-12', '987654321', 2, 4, 2, 1, NOW(), NOW()),
+    ('Maria', 'Martinez', '1992-02-28', '112233445', 2, 5, 3, 1, NOW(), NOW()),
+    ('Luis', 'Garcia', '1995-07-01', '556677889', 1, 6, 1, 1, NOW(), NOW()),
+    ('Employee', 'Employee', '1980-01-01', '222222222', 3, 2, 1, 1, NOW(), NOW());
 
 -- =========================
 -- ACTUALIZAR LÍDERES DE DEPARTAMENTO

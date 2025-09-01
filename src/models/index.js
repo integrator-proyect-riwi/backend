@@ -25,12 +25,12 @@ applyAssociations();
 const syncDB = async () => {
   try {
     await sequelize.authenticate();
-    console.log('Conexión establecida con la base de datos.');
+    console.log('Connection established with the database.');
 
     await sequelize.sync();
-    console.log('Tablas sincronizadas correctamente.');
+    console.log('Tables synchronized correctly.');
   } catch (error) {
-    console.error('Error al sincronizar la base de datos:', error);
+    console.error('Error synchronizing database:', error);
   }
 };
 

@@ -11,10 +11,10 @@ const startServer = async () => {
     await syncDB();
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
-      console.log(`Servidor escuchando en http://localhost:${PORT}`);
+      console.log(`Server listening on http://localhost:${PORT}`);
     });
   } catch (error) {
-    console.error('Error al iniciar servidor:', error);
+    console.error('Error starting server:', error);
   };
 };
 

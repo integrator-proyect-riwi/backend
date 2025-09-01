@@ -1,7 +1,6 @@
 import Role from '../models/role.js';
 import User from '../models/user.js';
 
-// Crear usuario
 export async function createUser(req, res) {
   try {
     const user = await User.create(req.body);
@@ -11,7 +10,6 @@ export async function createUser(req, res) {
   }
 }
 
-// Listar usuarios
 export async function getUsers(req, res) {
   try {
     const users = await User.findAll({
@@ -39,7 +37,6 @@ export async function getUsers(req, res) {
   }
 }
 
-//listar  usuario especifico
 export async function getUserById(req, res) {
   try {
     const id = req.params.id
@@ -69,18 +66,15 @@ export async function getUserById(req, res) {
   }
 }
 
-// Editar usuario parcialmente (PATCH)
 export async function updateUser(req, res) {
   try {
     const id = req.params.id;
 
-    // Verificar si el usuario existe
     const user = await User.findByPk(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Actualizar solo los campos enviados en el body
     await user.update(req.body);
 
     res.json(user);

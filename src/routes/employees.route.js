@@ -1,6 +1,6 @@
 // routes/employees.js
 import { Router } from 'express';
-import { getEmployeeinformation, createEmployee, getEmployee, updateEmployee} from '../controllers/employees.controller.js';
+import { getEmployeeinformation, createEmployee, getEmployee, updateEmployee } from '../controllers/employees.controller.js';
 
 const router = Router();
 

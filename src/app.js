@@ -22,22 +22,22 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 app.get('/api/v1/', async(req,res) => {
-    res.send('Conectada')
+    res.send('Connected')
 });
 
 // auth
 app.use('/api/v1/auth', auth);
 
 // users
-app.use('/api/v1/users', users);
+app.use('/api/v1/users', verifyToken, users);
 
 // employees
-app.use('/api/v1/employees', employees);
+app.use('/api/v1/employees', verifyToken, employees);
 
 // requests
-app.use('/api/v1/requests', requests);
+app.use('/api/v1/requests', verifyToken, requests);
 
 // leaders and departments
-app.use('/api/v1/leaders', department);
+app.use('/api/v1/leaders', verifyToken, department);
 
 export default app;
