@@ -41,6 +41,28 @@ paths:
         '401':
           description: Invalid credentials
 
+  /auth/logout:
+    post:
+      summary: User logout
+      tags: [Auth]
+      requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RegisterUser'      
+      responses:
+        '200':
+          description: Logout successful
+
+  /leaders:
+    get:
+      summary: Get all departments with their leaders
+      tags: [leaders]
+      responses:
+        '200':
+          description: List of departments with leaders
+
   /users:
     get:
       summary: Get all users
@@ -139,6 +161,26 @@ paths:
         '200':
           description: Employee updated
 
+  /requests:
+    get:
+      summary: Get all requests
+      tags: [Requests]
+      responses:
+        '200':
+          description: List of requests
+    post:
+      summary: Create a new request
+      tags: [Requests]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+      responses:
+        '201':
+          description: Request created
+
   /requests/total-requests:
     get:
       summary: Get total number of requests
@@ -170,6 +212,68 @@ paths:
       responses:
         '200':
           description: Requests grouped by type
+
+  /requests/types:
+    get:
+      summary: Get requests grouped by types
+      tags: [Requests]
+      responses:
+        '200':
+          description: Requests grouped by types
+
+  /requests/employees/{id}:
+    get:
+      summary: Get request by ID
+      tags: [Requests]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Request found
+                  
+  /requests/{code}/status:
+    patch:
+      summary: Update status of a request
+      tags: [Requests]
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusId:
+                  type: integer
+                  example: 2
+      responses:
+        '200':
+          description: Request status updated
+
+  /requests/{code}:
+    delete:
+      summary: Delete a request by code
+      tags: [Requests]
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request deleted successfully
+        '404':
+          description: Request not found
 
 components:
   schemas:

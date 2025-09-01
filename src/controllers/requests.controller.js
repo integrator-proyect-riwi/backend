@@ -25,7 +25,7 @@ export async function totalRequests(req, res) {
             return res.status(200).json({ message: 'Not requests to show' })
         }
 
-        res.status(200).json(...totalRequests);
+        res.status(200).json(totalRequests);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -95,7 +95,7 @@ export async function lastRequests(req, res) {
 export async function requestsByType(req, res) {
     try {
         const requests = await Request.findAll({
-            where: { is_active: ture },
+            where: { is_active: true },
             attributes: [
                 [fn('COUNT', col('request.id')), 'total']
             ],
