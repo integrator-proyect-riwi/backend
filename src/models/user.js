@@ -2,28 +2,35 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 import { baseFields } from './baseModel.js';
 
-const Role = sequelize.define('role', {
+const User = sequelize.define('user', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  name: {
+  username: {
     type: DataTypes.STRING(100),
     unique: true,
     allowNull: false,
   },
-  codename: {
+  password: {
     type: DataTypes.STRING(100),
-    unique: true,
     allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING(150),
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true,
+    },
   },
   ...baseFields,
 }, {
-  tableName: 'role',
+  tableName: 'users',
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at',
 });
 
-export default Role;
+export default User;

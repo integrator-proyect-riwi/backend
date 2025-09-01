@@ -6,7 +6,7 @@ import cors from 'cors';
 import { swaggerUi, swaggerDocument } from './config/swagger.js';
 
 // import routes from './routes/index.js';
-import { auth, employees, users } from './routes/index.js';
+import { auth, employees, requests, users, department } from './routes/index.js';
 import { verifyToken } from './middlewares/auth.middleware.js';
 
 // 
@@ -22,16 +22,22 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 app.get('/api/v1/', async(req,res) => {
-    res.send('Conectada')
+    res.send('Connected')
 });
 
-//auth
+// auth
 app.use('/api/v1/auth', auth);
 
 // users
-app.use('/api/v1/users', users);
+app.use('/api/v1/users', verifyToken, users);
 
 // employees
-app.use('/api/v1/employees', employees);
+app.use('/api/v1/employees', verifyToken, employees);
+
+// requests
+app.use('/api/v1/requests', verifyToken, requests);
+
+// leaders and departments
+app.use('/api/v1/leaders', verifyToken, department);
 
 export default app;

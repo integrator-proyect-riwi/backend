@@ -1,1 +1,4 @@
-export { default as usersController } from './users.controller.js'
+export { default as usersController } from './users.controller.js';
+export { default as employeesController } from './employees.controller.js';
+export { default as authController } from './auth.controller.js';
+export { default as requestsController} from './reqests.controller.js';

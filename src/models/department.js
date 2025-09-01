@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 import { baseFields } from './baseModel.js';
 
-const Role = sequelize.define('role', {
+const Department = sequelize.define('department', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -10,20 +10,29 @@ const Role = sequelize.define('role', {
   },
   name: {
     type: DataTypes.STRING(100),
-    unique: true,
     allowNull: false,
+    unique: true,
   },
   codename: {
     type: DataTypes.STRING(100),
-    unique: true,
     allowNull: false,
+    unique: true,
+  },
+  leader_id: {
+    type: DataTypes.INTEGER,
+    unique: true,
+    allowNull: true,
+    references: {
+      model: 'employees',
+      key: 'id',
+    },
   },
   ...baseFields,
 }, {
-  tableName: 'role',
+  tableName: 'departments',
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at',
 });
 
-export default Role;
+export default Department;

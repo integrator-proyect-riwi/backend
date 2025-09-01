@@ -2,28 +2,29 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 import { baseFields } from './baseModel.js';
 
-const Role = sequelize.define('role', {
-  id: {
+const UserRole = sequelize.define('user_role', {
+  user_id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  name: {
-    type: DataTypes.STRING(100),
-    unique: true,
     allowNull: false,
+    references: {
+      model: 'users',
+      key: 'id',
+    },
   },
-  codename: {
-    type: DataTypes.STRING(100),
-    unique: true,
+  role_id: {
+    type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: 'role',
+      key: 'id',
+    },
   },
   ...baseFields,
 }, {
-  tableName: 'role',
+  tableName: 'user_role',
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at',
 });
 
-export default Role;
+export default UserRole;

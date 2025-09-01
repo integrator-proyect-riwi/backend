@@ -2,7 +2,8 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 import { baseFields } from './baseModel.js';
 
-const Role = sequelize.define('role', {
+
+const Priority = sequelize.define('priority', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -20,10 +21,10 @@ const Role = sequelize.define('role', {
   },
   ...baseFields,
 }, {
-  tableName: 'role',
+  tableName: 'priorities',
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at',
 });
 
-export default Role;
+export default Priority;

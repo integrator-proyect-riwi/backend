@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 import { baseFields } from './baseModel.js';
 
-const Role = sequelize.define('role', {
+const ContractType = sequelize.define('contract_type', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -18,12 +18,12 @@ const Role = sequelize.define('role', {
     unique: true,
     allowNull: false,
   },
-  ...baseFields,
+  ...baseFields
 }, {
-  tableName: 'role',
+  tableName: 'contract_types',
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at',
 });
 
-export default Role;
+export default ContractType;

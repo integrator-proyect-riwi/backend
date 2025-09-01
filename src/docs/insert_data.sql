@@ -1,169 +1,195 @@
--- Limpiar todas las tablas y reiniciar IDs
-TRUNCATE TABLE 
-    vacations,
-    certificates_requests,
-    custom_requests,
-    supports,
-    employees,
-    contracts,
-    admins,
-    users,
-    users_role,
-    genders,
-    status,
-    types_status,
-    departments,
-    occupations,
-    types_requests,
-    types_certificates,
-    types_contracts,
-    priorities
-RESTART IDENTITY CASCADE;
+-- =========================
+-- LIMPIEZA DE TABLAS
+-- =========================
+TRUNCATE TABLE certificate_requests,
+requests,
+user_role,
+employees,
+contracts,
+departments,
+contract_types,
+supports,
+certificate_types,
+request_types,
+priorities,
+users,
+occupations,
+status,
+status_types,
+genders,
+role RESTART IDENTITY CASCADE;
 
--- Aquí ya puedes ejecutar tus INSERTs normalmente
--- 1) Roles
-INSERT INTO users_role (name, codename) VALUES
-('Administrator', 'admin'),
-('Employee', 'employee');
-
--- 2) Géneros
-INSERT INTO genders (name, codename) VALUES
-('Male', 'M'),
-('Female', 'F');
-
--- 3) Tipos de estado
-INSERT INTO types_status (name, codename) VALUES
-('General', 'general'),
-('Contract', 'contract'),
-('Request', 'request');
-
--- 4) Estados
-INSERT INTO status (name, codename, id_types_status) VALUES
-('Active', 'active', 1),
-('Rejected', 'rejected', 1),
-('Pending', 'pending', 3),
-('Approved', 'approved', 3),
-('Under Review', 'under', 2);
-
--- 5) Ocupaciones
-INSERT INTO occupations (name, codename) VALUES
-('Software Engineer', 'sw_eng'),
-('HR Specialist', 'hr_spec'),
-('Analyst', 'analyst'),
-('Manager', 'manager'),
-('Marketing Specialist', 'mkt_spec'),
-('Customer Support Agent', 'cs_agent'),
-('Project Manager', 'proj_mgr');
-
--- 6) Usuarios
-INSERT INTO users (username, passwd, email, id_user_role) VALUES
-('emp02', '123456', 'emp02@company.com', 2),
-('emp03', '123456', 'emp03@company.com', 2),
-('emp04', '123456', 'emp04@company.com', 2),
-('emp05', '123456', 'emp05@company.com', 2),
-('emp06', '123456', 'emp06@company.com', 2),
-('emp07', '123456', 'emp07@company.com', 2),
-('emp08', '123456', 'emp08@company.com', 2),
-('emp09', '123456', 'emp09@company.com', 2),
-('emp10', '123456', 'emp10@company.com', 2),
-('emp11', '123456', 'emp11@company.com', 2);
-
--- 7) Empleados
-INSERT INTO employees (name, lastname, birthday, identification, id_gender, id_user, id_status) VALUES
-('Alice', 'Smith', '1988-03-12', 'CC23456', 2, 1,  1),     -- HR
-('Bob', 'Johnson', '1992-07-22', 'CC34567', 1, 2, 1),     -- IT
-('Carol', 'Williams', '1995-11-30', 'CC45678', 2, 3, 1),  -- Finance
-('David', 'Brown', '1990-01-18', 'CC56789', 1, 4, 1),     -- IT
-('Eve', 'Jones', '1986-09-09', 'CC67890', 2, 5, 1),       -- Marketing
-('Frank', 'Garcia', '1991-04-25', 'CC78901', 1, 6, 1),    -- Support
-('Grace', 'Martinez', '1993-06-14', 'CC89012', 2, 7, 1),  -- HR
-('Hank', 'Davis', '1989-12-05', 'CC90123', 1, 8,1),     -- IT
-('Ivy', 'Rodriguez', '1994-02-17', 'CC01234', 2, 9, 1),  -- Finance
-('Jack', 'Lopez', '1987-08-03', 'CC12346', 1, 10, 1);     -- Marketing
-
--- 8) Departamentos
-INSERT INTO departments (name, codename, id_employee) VALUES
-('Human Resources', 'hr',1),
-('IT Department', 'it',2),
-('Finance', 'finance',3),
-('Marketing', 'marketing',4),
-('Customer Support', 'support',5);
-
--- 9) Types-contract
-INSERT INTO types_contracts (name, codename) VALUES
-('Fixed term contract', 'fixed'),
-('Contract for work or labor', 'labor'),
-('Learning contract', 'learn'),
-('Occasional, accidental or transitory contract','transitory'),
-('Indefinite-term contract', 'indefinite');
-
--- 10) Contratos
-INSERT INTO contracts (start_date, end_date, id_status, id_type_contract, id_department, id_occupation, responsibilities, salary) VALUES
-('2024-02-01', '2025-01-31', 1, 5, 1, 2, 'Handle employee onboarding and relations', 2800.00),       -- Alice (HR Specialist)
-('2023-05-01', '2025-04-30', 1, 1, 2, 1, 'Develop backend APIs', 4000.00),                            -- Bob (Software Engineer)
-('2024-03-15', '2024-12-15', 1, 2, 3, 3, 'Create financial dashboards', 3000.00),                     -- Carol (Analyst)
-('2024-01-01', '2024-12-31', 1, 1, 2, 1, 'Maintain legacy systems', 3700.00),                         -- David (Software Engineer)
-('2024-06-01', '2025-05-31', 1, 5, 4, 5, 'Manage social media campaigns', 3100.00),                   -- Eve (Marketing Specialist)
-('2024-04-01', '2024-09-30', 1, 4, 5, 6, 'Provide customer support and resolve tickets', 2600.00),    -- Frank (CS Agent)
-('2024-01-10', '2025-01-09', 1, 5, 1, 4, 'Lead HR strategy and operations', 4500.00),                 -- Grace (Manager)
-('2024-05-01', '2025-04-30', 1, 1, 2, 1, 'Develop and maintain internal apps', 3900.00),              -- Hank (Software Engineer)
-('2023-11-01', '2024-10-31', 1, 3, 3, 3, 'Support finance reporting', 2500.00),                       -- Ivy (Analyst)
-('2024-07-01', '2025-06-30', 1, 5, 4, 7, 'Coordinate marketing projects', 4300.00);                   -- Jack (Project Manager)
-
-
--- 11) Prioridades (para requests, vacations, etc.)
-INSERT INTO priorities (name, codename) VALUES
-('High', 'high'),
-('Medium', 'medium'),
-('Low', 'low');
-
--- 12) Soportes (para solicitudes)
-INSERT INTO supports (documents, description) VALUES
-(E'\\xDEADBEEF', 'Sample PDF file'),
-(E'\\xCAFEBABE', 'Medical certificate');
-
--- 13) Soportes (para solicitudes)
-INSERT INTO types_requests (name, codename) VALUES
-('Vacation Request', 'vacation'),
-('Certificate Request', 'certificate'),
-('Schedule Change', 'schedule_change'),
-('Medical Leave', 'medical_leave'),
-('Remote Work Request', 'remote_work');
-
--- 14) Solicitudes personalizadas
-INSERT INTO custom_requests (id_employee, id_type_request, id_support, id_status, id_priority, start_date, end_date)
+-- =========================
+-- ROLES
+-- =========================
+INSERT INTO role (name, codename, created_at, updated_at)
 VALUES
-(1, 1, 1, 1, 1, '2024-02-01', '2024-02-10'),
-(2, 1, 1, 1, 2, '2024-06-01', '2024-06-10'),
-(3, 2, 2, 3, 1, '2024-07-01', '2024-07-01'),
-(4, 4, 2, 4, 1, '2024-05-15', '2024-05-20'),
-(5, 5, 1, 1, 3, '2024-08-01', '2024-08-05');
+    ('Administrator', 'admin', NOW(), NOW()),
+    ('Employee', 'employee', NOW(), NOW());
 
--- 15). Tipos de certificados
-INSERT INTO types_certificates (name, codename) VALUES
-('Employment Certificate', 'employment'),
-('Salary Certificate', 'salary');
-
--- 16). admins
-INSERT INTO admins (name, lastname, id_user) VALUES
-('Carlos', 'Gomez', 1);
-
--- 17) Solicitudes certificadas
-INSERT INTO certificates_requests (id_employee, id_type_certificate, id_status, id_priority)
+-- =========================
+-- GÉNEROS
+-- =========================
+INSERT INTO genders (name, codename, created_at, updated_at)
 VALUES
-(1, 1, 3, 2),
-(6, 1, 3, 1),
-(7, 2, 1, 2),
-(8, 1, 4, 2),
-(9, 2, 1, 3);
+    ('Male', 'male', NOW(), NOW()),
+    ('Female', 'female', NOW(), NOW()),
+    ('Other', 'other', NOW(), NOW());
 
--- 18) Vacaciones
-INSERT INTO vacations (id_employee, description, start_date, end_date, id_status, id_priority)
+-- =========================
+-- TIPOS DE ESTADO
+-- =========================
+INSERT INTO status_types (name, codename, created_at, updated_at)
 VALUES
-(1, 'Vacaciones anuales', '2023-12-01', '2023-12-15', 1, 2),
-(2, 'Vacaciones personales', '2024-12-01', '2024-12-15', 1, 2),
-(3, 'Descanso post-proyecto', '2024-10-05', '2024-10-12', 3, 1),
-(4, 'Viaje familiar', '2024-11-20', '2024-11-30', 1, 1),
-(5, 'Vacaciones anuales', '2024-09-01', '2024-09-10', 4, 3),
-(6, 'Vacaciones pendientes', '2023-09-01', '2023-09-10', 3, 3);
+    ('Employee Status', 'employee_status', NOW(), NOW()),
+    ('Contract Status', 'contract_status', NOW(), NOW()),
+    ('Request Status', 'request_status', NOW(), NOW());
 
+-- =========================
+-- ESTADOS
+-- =========================
+INSERT INTO status (name, codename, status_type_id, created_at, updated_at)
+VALUES
+    ('Active', 'active', 1, NOW(), NOW()),
+    ('Inactive', 'inactive', 1, NOW(), NOW()),
+    ('Pending', 'pending', 3, NOW(), NOW()),
+    ('Approved', 'approved', 3, NOW(), NOW()),
+    ('Rejected', 'rejected', 3, NOW(), NOW()),
+    ('Current', 'current', 2, NOW(), NOW()),
+    ('Finalized', 'finalized', 2, NOW(), NOW());
+
+-- =========================
+-- OCUPACIONES
+-- =========================
+INSERT INTO occupations (name, codename, created_at, updated_at)
+VALUES
+    ('Software Engineer', 'software_engineer', NOW(), NOW()),
+    ('Data Analyst', 'data_analyst', NOW(), NOW()),
+    ('UX/UI Designer', 'ux_ui_designer', NOW(), NOW()),
+    ('Project Manager', 'project_manager', NOW(), NOW());
+
+-- =========================
+-- USUARIOS
+-- =========================
+INSERT INTO users (username, password, email, created_at, updated_at)
+VALUES
+    ('admin', '$2b$10$W6QRfupqvreMFgNyjP2ya.qIPf9maz2svCclkuZIKbIWLwj4wYV/a', 'admin@enterprise.com', NOW(), NOW()), -- admin123
+    ('employee', '$2b$10$n1CU49p7HVNPKB4tF13oOOwQa/IieFY1SxpEyRWiwQrGh69Cw9cTO', 'employee@enterprise.com', NOW(), NOW()), -- empleado123
+    ('jdoe', '$2b$10$Epgc5WFtDA5IjzuNdCbO2umKqxxm9KX.2w6uJ4GZZDJ/KX/y35pHC', 'jdoe@example.com', NOW(), NOW()), -- pass123
+    ('asmith', '$2b$10$Set.I/6tFki3KORLz2TCmeR65protBkQ7wfCz7RNetbDjsz5fQr5G', 'asmith@example.com', NOW(), NOW()), -- pass456
+    ('mmartinez', '$2b$10$cIVw6XLVEbMu50.UTLOQDuNlouO8YkwEDZ8wmjK7mFqM2jOj9on/G', 'mmartinez@example.com', NOW(), NOW()), -- pass789
+    ('lgarcia', '$2b$10$uiDLeXdTqxiN/uVeriYwxOWzc2upGRSfb0nl2PgPMJu2K9iQnUj/O', 'lgarcia@example.com', NOW(), NOW()); -- pass000
+
+-- =========================
+-- PRIORIDADES
+-- =========================
+INSERT INTO priorities (name, codename, created_at, updated_at)
+VALUES
+    ('Normal', 'normal', NOW(), NOW()),
+    ('Urgent', 'urgent', NOW(), NOW());
+
+-- =========================
+-- TIPOS DE SOLICITUD
+-- =========================
+INSERT INTO request_types (name, codename, created_at, updated_at)
+VALUES
+    ('Vacations', 'vacations', NOW(), NOW()),
+    ('Medical Permit', 'medical_permit', NOW(), NOW()),
+    ('Parental Leave', 'p_m_leave', NOW(), NOW()),
+    ('Schedule Change', 'schedule_change', NOW(), NOW()),
+    ('Personal Permit', 'personal_permit', NOW(), NOW()),
+    ('Training Leave', 'training_leave', NOW(), NOW()),
+    ('Compensatory Day', 'compensatory_day', NOW(), NOW());
+
+-- =========================
+-- TIPOS DE CERTIFICADO
+-- =========================
+INSERT INTO certificate_types (name, codename, created_at, updated_at)
+VALUES
+    ('Employment Certificate', 'employment_certificate', NOW(), NOW()),
+    ('Income Certificate', 'income_certificate', NOW(), NOW());
+
+-- =========================
+-- SOPORTES
+-- =========================
+INSERT INTO supports (documents, description, observation, created_at, updated_at)
+VALUES
+    (E'\\x', 'I need a certificate for the bank.', 'No observations', NOW(), NOW()),
+    (E'\\x', 'I request permission for personal reasons.', 'Urgent', NOW(), NOW());
+
+-- =========================
+-- TIPOS DE CONTRATO
+-- =========================
+INSERT INTO contract_types (name, codename, created_at, updated_at)
+VALUES
+    ('Full-time', 'full_time', NOW(), NOW()),
+    ('Half-time', 'half_time', NOW(), NOW()),
+    ('Part-time', 'part_time', NOW(), NOW());
+
+-- =========================
+-- DEPARTAMENTOS
+-- =========================
+INSERT INTO departments (name, codename, leader_id, created_at, updated_at)
+VALUES
+    ('Engineering Department', 'engineering_dept', NULL, NOW(), NOW()),
+    ('HR Department', 'hr_dept', NULL, NOW(), NOW()),
+    ('Marketing Department', 'marketing_dept', NULL, NOW(), NOW());
+
+-- =========================
+-- CONTRATOS
+-- =========================
+INSERT INTO contracts (start_date, end_date, retire_date, status_id, contract_type_id, department_id, occupation_id, responsibilities, salary, created_at, updated_at)
+VALUES
+    ('2023-01-15', NULL, NULL, 6, 1, 1, 1, 'Software development', 50000.00, NOW(), NOW()),
+    ('2023-03-20', NULL, NULL, 6, 1, 2, 2, 'Personnel data analysis', 45000.00, NOW(), NOW()),
+    ('2023-05-10', NULL, NULL, 6, 2, 3, 3, 'Campaign design', 35000.00, NOW(), NOW());
+
+-- =========================
+-- EMPLEADOS
+-- =========================
+INSERT INTO employees (name, lastname, birthday, identification, gender_id, user_id, contract_id, status_id, created_at, updated_at)
+VALUES
+    ('John', 'Doe', '1990-05-25', '123456789', 1, 3, 1, 1, NOW(), NOW()),
+    ('Anne', 'Smith', '1985-11-12', '987654321', 2, 4, 2, 1, NOW(), NOW()),
+    ('Maria', 'Martinez', '1992-02-28', '112233445', 2, 5, 3, 1, NOW(), NOW()),
+    ('Luis', 'Garcia', '1995-07-01', '556677889', 1, 6, 1, 1, NOW(), NOW()),
+    ('Employee', 'Employee', '1980-01-01', '222222222', 3, 2, 1, 1, NOW(), NOW());
+
+-- =========================
+-- ACTUALIZAR LÍDERES DE DEPARTAMENTO
+-- =========================
+UPDATE departments SET leader_id = 1 WHERE id = 1;
+UPDATE departments SET leader_id = 2 WHERE id = 2;
+UPDATE departments SET leader_id = 3 WHERE id = 3;
+
+-- =========================
+-- ROLES DE USUARIO
+-- =========================
+INSERT INTO user_role (user_id, role_id, created_at, updated_at)
+VALUES
+    (1, 1, NOW(), NOW()),
+    (2, 2, NOW(), NOW()),
+    (3, 2, NOW(), NOW()),
+    (4, 2, NOW(), NOW()),
+    (5, 2, NOW(), NOW()),
+    (6, 2, NOW(), NOW());
+
+-- =========================
+-- SOLICITUDES
+-- =========================
+INSERT INTO requests (code, employee_id, request_type_id, support_id, status_id, priority_id, leader_id, start_date, end_date, created_at, updated_at)
+VALUES
+    ('sol-001', 2, 3, 2, 3, 2, 2, '2025-10-15', '2025-10-26', NOW(), NOW()),
+    ('sol-002', 3, 3, 1, 3, 1, 1, '2025-09-15', '2025-09-25', NOW(), NOW()),
+    ('sol-003', 1, 1, 1, 4, 2, 2, '2025-08-01', '2025-08-01', NOW(), NOW()),
+    ('sol-004', 4, 2, 2, 3, 1, 3, '2025-09-10', '2025-09-15', NOW(), NOW()),
+    ('sol-005', 2, 3, 2, 5, 1, 1, '2025-10-01', '2025-10-10', NOW(), NOW()),
+    ('sol-006', 1, 1, 1, 4, 1, 2, '2025-07-15', '2025-07-15', NOW(), NOW());
+
+-- =========================
+-- SOLICITUDES DE CERTIFICADOS
+-- =========================
+INSERT INTO certificate_requests (request_id, certificate_type_id, created_at, updated_at)
+VALUES
+    (3, 1, NOW(), NOW()),
+    (6, 2, NOW(), NOW());

@@ -1,7 +1,6 @@
 import Role from '../models/role.js';
-import User from '../models/users.js';
+import User from '../models/user.js';
 
-// Crear usuario
 export async function createUser(req, res) {
   try {
     const user = await User.create(req.body);
@@ -11,41 +10,75 @@ export async function createUser(req, res) {
   }
 }
 
-// Listar usuarios
 export async function getUsers(req, res) {
   try {
     const users = await User.findAll({
+      attributes: ['username', 'password', 'email'],
       include: [{
         model: Role,
-        as: 'role',
-        attributes: ['name']
-      }]
+        as: 'roles',
+        attributes: ['name'],
+        through: { attributes: [] }
+      }],
+      where: { is_active: true },
+      order: [['id', 'DESC']]
     });
-    res.json(users);
+    if (!users) return res.status(404).json({ message: 'Not users to show' });
+
+    const simplifiedUsers = users.map(user => ({
+      username: user.username,
+      email: user.email,
+      role: user.roles.map(r => r.name).join(', ')
+    }));
+
+    res.json(simplifiedUsers);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
 
-//listar  usuario especifico
 export async function getUserById(req, res) {
   try {
     const id = req.params.id
     const user = await User.findOne({
       include: [{
-      model: Role,
-      as: 'role',
-      attributes: ['name']
-    }],
-    where:{
-      id: id
-    }
-  });
-    if (!user) {
-      res.status(404).json({ message: 'User not found' });
+        model: Role,
+        as: 'roles',
+        attributes: ['name'],
+        through: { attributes: [] }
+      }],
+      where: {
+        id: id,
+        is_active: true
+      }
+    });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const simplifiedUser = {
+      username: user.username,
+      email: user.email,
+      role: user.roles.map(r => r.name).join(', ')
     };
-    res.status(201).json(user);
+
+    res.status(201).json(simplifiedUser);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+}
+
+export async function updateUser(req, res) {
+  try {
+    const id = req.params.id;
+
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await user.update(req.body);
+
+    res.json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 }
