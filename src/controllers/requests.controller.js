@@ -214,10 +214,7 @@ export async function getRequests(req, res) {
         if (!user) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
-
-        console.log(user);
-        
-
+    
         const userRole = user.role
         if (!userRole) return res.status(404).json({ error: 'Role has not provided' });
 
@@ -293,10 +290,7 @@ export async function getRequests(req, res) {
                 if (!employee) {
                     return res.status(404).json({ error: 'Employee not found for this user' });
                 }
-
-                // console.log(employee);
                 
-
                 const requests = await Request.findAll({
                     attributes: [
                         'code',
@@ -396,7 +390,7 @@ export async function updateStatusRequest(req, res) {
 // get single request by id with employee name, department, request date, period, status, priority, and leader
 export const getRequestById = async (req, res) => {
     try {
-        const { id } = req.params; // 👈 id de la URL
+        const { id } = req.params;
         const request = await Request.findByPk(id, {
             where: { is_active: true },
             include: [

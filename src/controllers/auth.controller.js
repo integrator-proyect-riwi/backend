@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken'
 import User from '../models/user.js';
 import Role from '../models/role.js';
 
-//users registration logic
 export async function register(req, res) {
     const { username, password, email, role } = req.body;
 
@@ -42,7 +41,6 @@ export async function register(req, res) {
     }
 }
 
-//users login logic
 export async function login(req, res) {
     const { email, password } = req.body;
 
