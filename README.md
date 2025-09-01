@@ -30,7 +30,7 @@ TramiGo is designed to develop a centralized application that automates, organiz
 ---
 
 ## API Documentation
-The complete API documentation is available in [Swagger](localhost:300/api-docs/)
+The complete API documentation is available in [Swagger](https://backend-0syv.onrender.com/api-docs/)
 
 ---
 # Backend Architecture
